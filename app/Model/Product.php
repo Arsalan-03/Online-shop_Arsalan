@@ -2,7 +2,7 @@
 namespace Model;
 
 use Model\Model;
-require_once './../Model/Model.php';
+
 class Product extends Model
 {
     public function getAll()

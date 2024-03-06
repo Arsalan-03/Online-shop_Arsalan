@@ -2,7 +2,7 @@
 namespace Model;
 
 use Model\Model;
-require_once './../Model/Model.php';
+
 class UserProduct extends Model
 {
     public function addProduct(int $userId, int $productId, int $quantity)

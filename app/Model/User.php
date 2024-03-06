@@ -2,7 +2,7 @@
 namespace Model;
 
 use Model\Model;
-require_once './../Model/Model.php';
+
 class User extends Model
 {
     public function getOneByEmail(string $email): array|false
