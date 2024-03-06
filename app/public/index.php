@@ -1,26 +1,38 @@
 <?php
 use Controller\UserController;
 use Controller\MainController;
-use Controller\UserProductController;
 
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-//$autoloaderController = function (string $className)
-//{
-//    $path =  "./../Controller/$className.php";
-//    if (file_exists($path)) {
-//        require_once $path;
-//
-//        return true;
-//    }
-//    return false;
-//}
+$autoloadController = function (string $className) {
+    $path =  "./../Controller/$className.php";
+    if (file_exists($path)) {
+        require_once $path;
+
+        return true;
+    }
+
+    return false;
+};
+$autoloadModel = function (string $className)
+{
+    $path =  "./../Model/$className.php";
+    if (file_exists($path)) {
+        require_once $path;
+
+        return true;
+    }
+
+    return false;
+};
+
+spl_autoload_register($autoloadController);
+spl_autoload_register($autoloadModel);
 
 
 require_once './../Controller/UserController.php';
 require_once './../Controller/MainController.php';
-require_once './../Controller/UserProductController.php';
 
 if ($requestUri === '/registrate') {
     $obj = new UserController();
@@ -44,18 +56,11 @@ if ($requestUri === '/registrate') {
     $obj = new MainController();
     if ($requestMethod === 'GET') {
         $obj->getProducts();
-    } else {
-        echo "$requestMethod не поддерживает $requestMethod";
-    }
-} elseif ($requestUri === '/add-product') {
-    $obj = new UserProductController();
-    if ($requestMethod === 'GET') {
-        $obj->getAddProductForm();
     } elseif ($requestMethod === 'POST') {
         $obj->addProduct($_POST);
     } else {
-        echo "Метод $requestMethod не поддерживает $requestUri";
+        echo "$requestMethod не поддерживает $requestMethod";
     }
 } else {
-    require_once "./../View/404.html";
-}
+        require_once "./../View/404.html";
+    }

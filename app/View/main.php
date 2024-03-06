@@ -3,9 +3,9 @@
     <div class="card-deck">
         <?php if (isset($products)) {
             foreach ($products as $product): ?>
-        <form>
+        <form action="/main" method="POST">
             <div class="card text-center">
-                <a href="#">
+
                     <p class="card-text text-muted"><h1> <?php echo $product['name']; ?> </h1>
                     <img class="card-img-top" src=" <?php echo $product['image']; ?>" alt="Card image" style="width: 250px; height: 300px;>
                 <div class="card-body">
@@ -13,9 +13,14 @@
                     <div class="card-footer">
                         <h2> <?php echo '$' . $product['price']; ?></h2>
                     </div>
+                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                    <div class="input-box">
+                        <?php echo $errors['quantity'] ?? ''; ?>
+                        <input type="text" name="quantity" placeholder="Количество">
+                    </div>
+                    <button class="image-button"></button>
             </div>
-                    <button type="submit" class="registerbtn"> Купить </button>
-            </a>
+
         </form>
 
         </div>
@@ -63,8 +68,11 @@
         background-color: white;
     }
 
-    .registerbtn {
-        background-image: url("../images/icon.svg");
-        background-size: 90px 97px;
+    .image-button {
+        width: 85px;
+        height: 50px;
+        border: none;
+        background-image: url('https://img.freepik.com/premium-vector/shopping-backet-icon-buy-sign-for-sale-web-site-shop-retail-market-and-commerce-store-symbol_87543-11125.jpg');
+        background-size: cover;
     }
 </style>
