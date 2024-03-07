@@ -20,6 +20,7 @@ class UserController
         $errors = $this->regValidate($data);
 
         if (empty($errors)) {
+
             $name = $data['name'];
             $email = $data['email'];
             $password = $data['psw'];

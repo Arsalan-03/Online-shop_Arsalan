@@ -1,5 +1,6 @@
 <?php
 namespace Controller;
+
 use Model\Product;
 use Model\UserProduct;
 
@@ -17,13 +18,17 @@ class MainController
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
+
             header("Location: /login");
+
         } else {
 
            $products = $this->productModel->getAll();
 
             if (empty($products)) {
+
                 echo '<h1 style="color: red">Продуктов в Таблице нет</h1>';
+
                 die;
             }
             require_once './../View/main.php';
@@ -35,22 +40,33 @@ class MainController
         session_start();
 
         if (!isset($_SESSION['user_id'])) {
+
             header("Location: /login.php");
+
         }
 
         $userId = $_SESSION['user_id'];
 
         $productId = $data['product_id'];
+
         $quantity = $data['quantity'];
 
         $errors = $this->productValidate($quantity);
 
         if (empty($errors)) {
 
-            $this->userProduct->addProduct($userId, $productId, $quantity);
+            if (empty($result = $this->userProduct->checkUserByUserId($userId, $productId))) {
+                $this->userProduct->addProduct($userId, $productId, $quantity);
+            } else {
+                $this->userProduct->updateProduct($quantity, $userId, $productId);
+            }
+
+
             header("Location: /main");
         } else {
+
             $products = $this->productModel->getAll();
+
             require_once './../View/main.php';
         }
     }
@@ -60,7 +76,9 @@ class MainController
         $errors = [];
 
         if ($quantity <= 0) {
+
             $errors['quantity'] = "Вы ввели неккоректное значение, попробуйте снова";
+
         }
         return $errors;
     }
@@ -73,5 +91,4 @@ class MainController
             header("Location: /login");
         }
     }
-
 }

@@ -1,5 +1,6 @@
 <?php
 
+namespace Core;
 class Autoloader
 {
     public static function registrate($dir) //Статический методы вызываются без создания объекта
