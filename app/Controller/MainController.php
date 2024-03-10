@@ -14,7 +14,7 @@ class MainController
         $this->userProduct = new UserProduct();
         $this->productModel = new Product();
     }
-    public function getProducts()
+    public function getProducts(): void
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
@@ -25,12 +25,6 @@ class MainController
 
            $products = $this->productModel->getAll();
 
-            if (empty($products)) {
-
-                echo '<h1 style="color: red">Продуктов в Таблице нет</h1>';
-
-                die;
-            }
             require_once './../View/main.php';
         }
     }
@@ -42,7 +36,6 @@ class MainController
         if (!isset($_SESSION['user_id'])) {
 
             header("Location: /login.php");
-
         }
 
         $userId = $_SESSION['user_id'];
@@ -55,12 +48,11 @@ class MainController
 
         if (empty($errors)) {
 
-            if (empty($result = $this->userProduct->checkUserByUserId($userId, $productId))) {
+            if (empty($this->userProduct->getOnyByUserIdProductId($userId, $productId))) {
                 $this->userProduct->addProduct($userId, $productId, $quantity);
             } else {
-                $this->userProduct->updateProduct($quantity, $userId, $productId);
+                $this->userProduct->updateQuantity($quantity, $userId, $productId);
             }
-
 
             header("Location: /main");
         } else {

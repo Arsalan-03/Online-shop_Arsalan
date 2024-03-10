@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Controller\CartController;
 use Controller\MainController;
 use Controller\UserController;
 
@@ -19,7 +20,7 @@ class App
             } elseif ($requestMethod === 'POST') {
                 $obj->registrate($_POST);
             } else {
-                echo "$requestMethod не поддерживает $requestUri";
+                echo "$requestUri не поддерживает $requestMethod";
             }
         } elseif ($requestUri === '/login') {
             $obj = new UserController();
@@ -28,8 +29,7 @@ class App
             } elseif ($requestMethod === 'POST') {
                 $obj->login($_POST);
             } else {
-                echo "$requestMethod не поддерживает $requestUri";
-            }
+                echo "$requestUri не поддерживает $requestMethod";            }
         } elseif ($requestUri === '/main') {
             $obj = new MainController();
             if ($requestMethod === 'GET') {
@@ -37,7 +37,13 @@ class App
             } elseif ($requestMethod === 'POST') {
                 $obj->addProduct($_POST);
             } else {
-                echo "$requestMethod не поддерживает $requestMethod";
+                echo "$requestUri не поддерживает $requestMethod";            }
+        } elseif ($requestUri === '/cart') {
+            $obj = new CartController();
+            if ($requestMethod === 'GET') {
+                $obj->getCart($_POST);
+            } else {
+                echo "$requestUri не поддерживает $requestMethod";
             }
         } else {
             require_once "./../View/404.html";

@@ -4,6 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
+
     <!-- CSS only -->
     <link
             rel="stylesheet"
@@ -34,17 +35,19 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"
     ></script>
-    <title>Animated Card</title>
+    <title>Вход</title>
 </head>
 <body>
 <div class="wrapper">
     <center>
+
         <div class="card" style="margin-top: 200px;">
             <div class="circle"></div>
             <div class="circle"></div>
 
             <div class="card-inner login">
                 <form action="/login" method="POST">
+
                     <div class="input-box">
                         <input type="email" name="email" placeholder="Email">
                         <label style="color: red"><?php echo $errors['email'] ?? ''; ?></label>
@@ -61,7 +64,7 @@
 
                     <div class="links">
                         <a href="#">Forgot password</a>
-                        <a href="http://localhost:81/registrate.php">You don't have an account</a>
+                        <a href="http://localhost:81/registrate">You don't have an account</a>
                     </div>
                 </form>
             </div>

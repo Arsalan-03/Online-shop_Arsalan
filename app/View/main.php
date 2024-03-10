@@ -1,5 +1,17 @@
+<?php
+if (empty($products)) {
+
+    echo '<h1 style="color: red">Продуктов в Таблице нет</h1>';
+}
+?>
+
 <div class="container">
     <h2>Catalog</h2>
+
+    <a class="basket" href="http://localhost:81/cart" style="color: green; float: right; margin-left: 10px;">
+        <img src="https://png.pngtree.com/element_our/20190531/ourlarge/pngtree-shopping-cart-convenient-icon-image_1287807.jpg" alt="Cart" style="width: 100px; height: 100px;">
+    </a>
+
     <div class="card-deck">
         <?php if (isset($products)) {
             foreach ($products as $product): ?>
@@ -26,7 +38,8 @@
         </div>
         <?php endforeach; }?>
 
-<style>
+
+    <style>
     body {
         font-style: sans-serif;
     }
