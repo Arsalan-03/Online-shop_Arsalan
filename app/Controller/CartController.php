@@ -23,12 +23,20 @@ class CartController
             $userId = $_SESSION['user_id'];
 
             $userProducts = $this->userProduct->getAllUserProducts($userId);
+            $totalPrice = $this->totalPrice($userProducts);
 
             require_once './../View/cart.php';
         }
+    }
 
-        if (empty($userProducts)) {
-            echo "Корзина пустая";
-        }
+    public function totalPrice(array $userProducts): float
+    {
+        $totalPrice = 0;
+
+            foreach ($userProducts as $userProduct) {
+                $totalPrice += $userProduct['price'] * $userProduct['quantity'];
+            }
+
+        return $totalPrice;
     }
 }

@@ -18,13 +18,17 @@ class MainController
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
-
             header("Location: /login");
-
         } else {
 
-           $products = $this->productModel->getAll();
+            $userId = $_SESSION['user_id'];
+            $products = $this->productModel->getAll();
+            $cartProducts = $this->userProduct->getAllUserProducts($userId);
 
+            $totalQuantity = 0;
+            foreach ($cartProducts as $cartProduct) {
+                $totalQuantity += $cartProduct['quantity'];
+            }
             require_once './../View/main.php';
         }
     }
@@ -48,17 +52,16 @@ class MainController
 
         if (empty($errors)) {
 
-            if (empty($this->userProduct->getOnyByUserIdProductId($userId, $productId))) {
+            if (empty($this->userProduct->getOneByUserIdProductId($userId, $productId))) {
                 $this->userProduct->addProduct($userId, $productId, $quantity);
             } else {
-                $this->userProduct->updateQuantity($quantity, $userId, $productId);
+                $this->userProduct->updateQuantityPlus($quantity, $userId, $productId);
             }
 
             header("Location: /main");
         } else {
 
             $products = $this->productModel->getAll();
-
             require_once './../View/main.php';
         }
     }
@@ -70,17 +73,24 @@ class MainController
         if ($quantity <= 0) {
 
             $errors['quantity'] = "Вы ввели неккоректное значение, попробуйте снова";
-
         }
         return $errors;
     }
 
-    public function logout(): void
+    public function deleteProduct(array $data): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_destroy();
+        session_start();
 
+        if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
         }
+
+        $userId = $_SESSION['user_id'];
+        $productId = $data['product_id'];
+
+        $this->userProduct->updateQuantityMinus($userId, $productId);
+
+        header("Location: /main");
     }
+
 }

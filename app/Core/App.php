@@ -34,14 +34,33 @@ class App
             $obj = new MainController();
             if ($requestMethod === 'GET') {
                 $obj->getProducts();
-            } elseif ($requestMethod === 'POST') {
-                $obj->addProduct($_POST);
             } else {
                 echo "$requestUri не поддерживает $requestMethod";            }
         } elseif ($requestUri === '/cart') {
             $obj = new CartController();
             if ($requestMethod === 'GET') {
-                $obj->getCart($_POST);
+                $obj->getCart();
+            } else {
+                echo "$requestUri не поддерживает $requestMethod";
+            }
+        } elseif ($requestUri === '/logout') {
+            $obj = new UserController();
+            if ($requestMethod === 'POST') {
+                $obj->logout();
+            }  else {
+                echo "$requestUri не поддерживает $requestMethod";
+            }
+        } elseif ($requestUri === '/add-product') {
+            $obj = new MainController();
+            if ($requestMethod === 'POST') {
+                $obj->addProduct($_POST);
+            } else {
+                echo "$requestUri не поддерживает $requestMethod";
+            }
+        } elseif ($requestUri === '/delete-product') {
+            $obj = new MainController();
+            if ($requestMethod === 'POST') {
+                $obj->deleteProduct($_POST);
             } else {
                 echo "$requestUri не поддерживает $requestMethod";
             }

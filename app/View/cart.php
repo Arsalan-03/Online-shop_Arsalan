@@ -1,3 +1,8 @@
+<?php
+if (empty($userProducts)) {
+    echo "Корзина пустая";
+} ?>
+
 <body>
 <div id="w">
     <header id="title">
@@ -16,9 +21,6 @@
             </thead>
             <tbody>
             <?php
-
-            $totalPrice = '';
-
             if (isset($userProducts)) {
                 foreach ($userProducts as $userProduct):
             ?>
@@ -39,17 +41,6 @@
             <tr class="totalprice">
                 <td class="light">Total:</td>
                 <td colspan="2">&nbsp;</td>
-                <?php
-                $totalPrice = 0;
-
-                if (isset($userProducts)) {
-                    foreach ($userProducts as $userProduct) {
-                        $subTotal = $userProduct['price'] * $userProduct['quantity'];
-
-                        $totalPrice += $subTotal;
-                    }
-                }
-                ?>
                 <td colspan="2"><span class="thick"><h2 style="color: red"> <?php echo '$' . $totalPrice ?> </span> </h1></td>
             </tr>
             <!-- checkout btn -->
