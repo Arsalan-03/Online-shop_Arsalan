@@ -8,64 +8,82 @@ use Controller\UserController;
 
 class App
 {
+    private array $routes = [
+        '/registrate' => [
+            'GET' => [
+                'class' => UserController::class,
+                'method' => 'getRegistrate',
+            ],
+            'POST' => [
+                'class' => UserController::class,
+                'method' => 'registrate',
+            ],
+        ],
+        '/login' => [
+            'GET' => [
+                'class' => UserController::class,
+                'method' => 'getLogin',
+            ],
+            'POST' => [
+                'class' => UserController::class,
+                'method' => 'login',
+            ],
+        ],
+        '/main' => [
+            'GET' => [
+                'class' => MainController::class,
+                'method' => 'getProducts',
+            ],
+        ],
+        '/cart' => [
+            'GET' => [
+                'class' => CartController::class,
+                'method' => 'getCart',
+            ],
+        ],
+        '/logout' => [
+            'POST' => [
+                'class' => UserController::class,
+                'method' => 'logout',
+            ],
+        ],
+        '/add-product' => [
+            'POST' => [
+                'class' => MainController::class,
+                'method' => 'addProduct',
+            ],
+        ],
+        '/delete-product' => [
+            'POST' => [
+                'class' => MainController::class,
+                'method' => 'deleteProduct',
+            ],
+        ],
+    ];
+
+
     public function run()
     {
         $requestUri = $_SERVER['REQUEST_URI'];
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        if ($requestUri === '/registrate') {
-            $obj = new UserController();
-            if ($requestMethod === 'GET') {
-                $obj->getRegistrate();
-            } elseif ($requestMethod === 'POST') {
-                $obj->registrate($_POST);
+        if (isset($this->routes[$requestUri])) {
+
+            $requestMethod = $_SERVER['REQUEST_METHOD'];
+            $routMethods = $this->routes[$requestUri];
+
+            if (isset($routMethods[$requestMethod])) {
+                $handler = $routMethods[$requestMethod];
+                $class = $handler['class'];
+                $method = $handler['method'];
+
+                $obj = new $class;
+
+                $obj->$method($_POST);
             } else {
-                echo "$requestUri не поддерживает $requestMethod";
-            }
-        } elseif ($requestUri === '/login') {
-            $obj = new UserController();
-            if ($requestMethod === 'GET') {
-                $obj->getLogin();
-            } elseif ($requestMethod === 'POST') {
-                $obj->login($_POST);
-            } else {
-                echo "$requestUri не поддерживает $requestMethod";            }
-        } elseif ($requestUri === '/main') {
-            $obj = new MainController();
-            if ($requestMethod === 'GET') {
-                $obj->getProducts();
-            } else {
-                echo "$requestUri не поддерживает $requestMethod";            }
-        } elseif ($requestUri === '/cart') {
-            $obj = new CartController();
-            if ($requestMethod === 'GET') {
-                $obj->getCart();
-            } else {
-                echo "$requestUri не поддерживает $requestMethod";
-            }
-        } elseif ($requestUri === '/logout') {
-            $obj = new UserController();
-            if ($requestMethod === 'POST') {
-                $obj->logout();
-            }  else {
-                echo "$requestUri не поддерживает $requestMethod";
-            }
-        } elseif ($requestUri === '/add-product') {
-            $obj = new MainController();
-            if ($requestMethod === 'POST') {
-                $obj->addProduct($_POST);
-            } else {
-                echo "$requestUri не поддерживает $requestMethod";
-            }
-        } elseif ($requestUri === '/delete-product') {
-            $obj = new MainController();
-            if ($requestMethod === 'POST') {
-                $obj->deleteProduct($_POST);
-            } else {
-                echo "$requestUri не поддерживает $requestMethod";
+                echo "Метод $requestMethod не поддерживается для $requestUri";
             }
         } else {
-            require_once "./../View/404.html";
+            require_once './../View/404.html';
         }
     }
 }

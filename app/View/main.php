@@ -27,11 +27,6 @@ if (empty($products)) {
                         <h2> <?php echo '$' . $product['price']; ?></h2>
                     </div>
                     <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-<!--                    <div class="input-box">-->
-<!--                        --><?php //echo $errors['quantity'] ?? ''; ?>
-<!--                        <input type="text" name="quantity" placeholder="Количество">-->
-<!--                    </div>-->
-<!--                    <button class="image-button"></button>-->
             </div>
             <div class="input-box">
                 <?php echo $errors['quantity'] ?? ''; ?>
