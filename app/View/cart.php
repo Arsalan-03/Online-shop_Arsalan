@@ -39,13 +39,13 @@ if (empty($userProducts)) {
             <!--subtotal -->
 
             <tr class="totalprice">
-                <td class="light">Total:</td>
+                <td class="light"><h1 style="color: navy"> Total: </h1></td>
                 <td colspan="2">&nbsp;</td>
                 <td colspan="2"><span class="thick"><h2 style="color: red"> <?php echo '$' . $totalPrice ?> </span> </h1></td>
             </tr>
             <!-- checkout btn -->
             <tr class="checkoutrow">
-                <td colspan="5" class="checkout"><button id="submitbtn">Checkout Now!</button></td>
+                <td colspan="5" class="checkout"><button id="submitbtn"> <a href="/order" style="color: black">Checkout Now!</a></button></td>
             </tr>
             </tbody>
         </table>
@@ -237,9 +237,9 @@ if (empty($userProducts)) {
 
     /** submit btn **/
     tr.checkoutrow {
-        background: #cfdae8;
-        border-top: 1px solid #abc0db;
-        border-bottom: 1px solid #abc0db;
+        background: #050505;
+        border-top: 1px solid rgba(166, 83, 239, 0.55);
+        border-bottom: 1px solid #ffffff;
     }
     td.checkout {
         padding: 12px 0;
@@ -264,12 +264,12 @@ if (empty($userProducts)) {
         text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
         cursor: pointer;
         overflow: hidden;
-        border-bottom: 1px solid #0071ff;
-        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #66aaff), color-stop(100%, #4d9cff));
-        background-image: -webkit-linear-gradient(#66aaff, #4d9cff);
+        border-bottom: 1px solid #6da5ee;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a40f0f), color-stop(100%, #ffffff));
+        background-image: -webkit-linear-gradient(#ffffff, #ffffff);
         background-image: -moz-linear-gradient(#66aaff, #4d9cff);
         background-image: -o-linear-gradient(#66aaff, #4d9cff);
-        background-image: linear-gradient(#66aaff, #4d9cff);
+        background-image: linear-gradient(#ffffff, #ffffff);
     }
     #submitbtn:hover {
         background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4d9cff), color-stop(100%, #338eff));
