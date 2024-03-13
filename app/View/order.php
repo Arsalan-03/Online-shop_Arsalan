@@ -9,6 +9,7 @@
             <h5 style="color: black">Contact information</h5>
             <div class="form-control">
                 <label for="checkout-email">E-mail</label>
+                <label style="color: red"><?php echo $errors['email'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-envelope"></span>
                     <input type="email" id="email" name="email" placeholder="Enter your email...">
@@ -16,6 +17,7 @@
             </div>
             <div class="form-control">
                 <label for="phone">Phone</label>
+                <label style="color: red"><?php echo $errors['postal'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-phone"></span>
                     <input type="tel" name="phone" id="phone" placeholder="Enter you phone...">
@@ -25,6 +27,7 @@
             <h5 style="color: black">Shipping address</h5>
             <div class="form-control">
                 <label for="name">Full name</label>
+                <label style="color: red"><?php echo $errors['name'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-user-circle"></span>
                     <input type="text" id="name" name="name" placeholder="Enter you name...">
@@ -32,6 +35,7 @@
             </div>
             <div class="form-control">
                 <label for="address">Address</label>
+                <label style="color: red"><?php echo $errors['address'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-home"></span>
                     <input type="text" name="address" id="address" placeholder="Your address...">
@@ -39,6 +43,7 @@
             </div>
             <div class="form-control">
                 <label for="city">City</label>
+                <label style="color: red"><?php echo $errors['city'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-building"></span>
                     <input type="text" name="city" id="city" placeholder="Your city...">
@@ -47,6 +52,7 @@
             <div class="form-group">
                 <div class="form-control">
                     <label for="country">Country</label>
+                    <label style="color: red"><?php echo $errors['country'] ?? ''; ?></label>
                     <div>
                         <span class="fa fa-globe"></span>
                         <input type="text" name="country" id="country" placeholder="Your country..." list="country-list">
@@ -61,6 +67,7 @@
                 </div>
                 <div class="form-control">
                     <label for="postal">Postal code</label>
+                    <label style="color: red"><?php echo $errors['postal'] ?? ''; ?></label>
                     <div>
                         <span class="fa fa-archive"></span>
                         <input type="numeric" name="postal" id="postal" placeholder="Your postal code...">

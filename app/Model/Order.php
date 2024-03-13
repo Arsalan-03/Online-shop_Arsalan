@@ -9,5 +9,4 @@ class Order extends Model
        $statement = $this->pdo->prepare("INSERT INTO orders(email, phone, name, address, city, country, postal) VALUES(:email, :phone, :name, :address, :city, :country, :postal)");
        $statement->execute(['email' => $email, 'phone' => $phone, 'name' => $name, 'address' => $address, 'city' => $city, 'country' => $country, 'postal' => $postal]);
     }
-
 }

@@ -13,6 +13,7 @@ class Autoloader
 
             $path = $dir . '/' . $path . '.php'; // /var/www/html/app/App.php
 
+
             if (file_exists($path)) { // Проверяет, есть ли такой файл
                 require_once $path;
                 return true;

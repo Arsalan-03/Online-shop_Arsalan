@@ -5,6 +5,7 @@ namespace Core;
 use Controller\CartController;
 use Controller\MainController;
 use Controller\OrderController;
+use Controller\ProductController;
 use Controller\UserController;
 
 class App
@@ -50,13 +51,13 @@ class App
         ],
         '/add-product' => [
             'POST' => [
-                'class' => MainController::class,
+                'class' => ProductController::class,
                 'method' => 'addProduct',
             ],
         ],
         '/delete-product' => [
             'POST' => [
-                'class' => MainController::class,
+                'class' => ProductController::class,
                 'method' => 'deleteProduct',
             ],
         ],
