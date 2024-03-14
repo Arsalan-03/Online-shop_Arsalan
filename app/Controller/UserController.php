@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 use Model\User;
+use Request\RegistrateRequest;
 
 class UserController
 {
@@ -15,15 +16,15 @@ class UserController
         require_once './../View/registrate.php';
     }
 
-    public function registrate(array $data): void
+    public function registrate(RegistrateRequest $request): void
     {
-        $errors = $this->regValidate($data);
+        $errors = $request->validate();
 
         if (empty($errors)) {
 
-            $name = $data['name'];
-            $email = $data['email'];
-            $password = $data['psw'];
+            $name = $request->getName();
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -32,63 +33,6 @@ class UserController
         }
 
         require_once './../View/registrate.php';
-    }
-
-    private function regValidate(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['name'])) {
-            $name = $data['name'];
-
-            if (strlen($name) < 2) {
-                $errors['name'] = 'Имя должен составлять не меньше 2 символов';
-            }
-        } else {
-            $errors['name'] = 'Заполните поле name';
-        }
-
-        if (isset($data['email'])) {
-            $email = $data['email'];
-
-            if (strlen($email) < 2) {
-                $errors['email'] = 'Почта должен составлять не меньше 2 символов';
-            } else {
-                $str = '@';
-                $pos = strpos($email, $str);
-                if ($pos === false) {
-                    $errors['email'] = 'Почта должен иметь символ @ в строке';
-                } elseif (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-                    $result = $this->modelUser->getOneByEmail($email);
-                    if (!empty($result)) {
-                        $errors['email'] = 'Пользователь с таким email уже сущетсвует';
-                    }
-                }
-            }
-        } else {
-            $errors['email'] = 'Заполните поле email';
-        }
-
-        if (isset($data['psw'])) {
-            $password = $data['psw'];
-
-            if (strlen($password) < 2) {
-                $errors['password'] = 'Паролль должен составлять не меньше 2 символов';
-            }
-        } else {
-            $errors['password'] = 'Заполните поле password';
-        }
-        if (isset($data['psw-repeat'])) {
-            $password_repeat = $data['psw-repeat'];
-
-            if ($password !== $password_repeat) {
-                $errors['psw-repeat'] = 'Пароли не совпадают';
-            }
-        } else {
-            $errors['psw-repeat'] = 'Заполните поле password-repeat';
-        }
-        return $errors;
     }
 
     public function getLogin()
@@ -110,7 +54,6 @@ class UserController
         require_once './../View/login.php';
     }
 
-
     private function logValidate(array $data): array
     {
         $errors = [];
@@ -126,7 +69,6 @@ class UserController
         }
         return $errors;
     }
-
     public function logout(): void
     {
         session_start();

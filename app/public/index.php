@@ -7,6 +7,8 @@ use Controller\ProductController;
 use Controller\UserController;
 use Core\App;
 use Core\Autoloader;
+use Request\OrderRequest;
+use Request\RegistrateRequest;
 
 require_once './../Core/App.php';
 require_once './../Core/Autoloader.php';
@@ -24,12 +26,12 @@ $app->get('/main', MainController::class, 'getProducts');
 $app->get('/cart', CartController::class, 'getCart');
 $app->get('/order', OrderController::class, 'getOrders');
 
-$app->post('/registrate', UserController::class, 'registrate');
+$app->post('/registrate', UserController::class, 'registrate', RegistrateRequest::class);
 $app->post('/logout', UserController::class, 'logout');
 $app->post('/login', UserController::class, 'login');
 $app->post('/add-product', ProductController::class, 'addProduct');
 $app->post('/delete-product', ProductController::class, 'deleteProduct');
-$app->post('/order', OrderController::class, 'orders');
+$app->post('/order', OrderController::class, 'orders', OrderRequest::class);
 
 $app->run();
 

@@ -7,6 +7,7 @@ use Controller\MainController;
 use Controller\OrderController;
 use Controller\ProductController;
 use Controller\UserController;
+use Request\Request;
 
 class App
 {
@@ -28,10 +29,11 @@ class App
                 $handler = $routMethods[$requestMethod];
                 $class = $handler['class'];
                 $method = $handler['method'];
-
+                $requestClass = $handler['request'] ?? Request::class;
                 $obj = new $class;
 
-                $obj->$method($_POST);
+                $request = new $requestClass($_POST);
+                $obj->$method($request);
             } else {
                 echo "Метод $requestMethod не поддерживается для $requestUri";
             }

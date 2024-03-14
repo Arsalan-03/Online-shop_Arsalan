@@ -6,6 +6,7 @@ use http\Exception\BadUrlException;
 use Model\Order;
 use Model\OrderProduct;
 use Model\UserProduct;
+use Request\OrderRequest;
 
 class OrderController
 {
@@ -32,123 +33,42 @@ class OrderController
         require_once './../View/order.php';
     }
 
-    public function orders(array $data): void
+    public function orders(OrderRequest $request): void
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
         }
 
-            $userId = $_SESSION['user_id'];
+        $userId = $_SESSION['user_id'];
 
-            $orderId = $this->createOrder($data);
+        $this->createOrder($request);
+        $email = $request->getEmail();
 
-            $productsInCart = $this->userProduct->getCartProduct($userId);
+        $productsInCart = $this->userProduct->getCartProduct($userId);
 
-           foreach ($productsInCart as $product) {
-               $this->orderProduct->addReadyOrder($orderId['id'], $product['user_id'], $product['product_id'], $product['quantity']);
-           }
+        foreach ($productsInCart as $product) {
+            $this->orderProduct->addReadyOrder($orderId['id'], $product['user_id'], $product['product_id'], $product['quantity']);
+        }
         $this->userProduct->deleteProduct($userId);
 
         require_once './../View/order.php';
     }
 
-    private function createOrder(array $data): void
+    private function createOrder(OrderRequest $request): void
     {
-        $errors = $this->validateOrders($data);
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $email = $data['email'];
-            $phone = $data['phone'];
-            $name = $data['name'];
-            $address = $data['address'];
-            $city = $data['city'];
-            $country = $data['country'];
-            $postal = $data['postal'];
+            $email = $request->getEmail();
+            $phone = $request->getPhone();
+            $name = $request->getName();
+            $address = $request->getAddress();
+            $city = $request->getCity();
+            $country = $request->getCountry();
+            $postal = $request->getPostal();
 
             $this->order->addOrder($email, $phone, $name, $address, $city, $country, $postal);
         }
-    }
-
-    private function validateOrders(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['email'])) {
-            $email = $data['email'];
-
-            $str = '@';
-            $pos = strpos($email, $str);
-
-            if ($pos === false) {
-                $errors['email'] = 'Неккоректно введен поле email';
-            } elseif (strlen($email) < 2) {
-                $errors['email'] = 'Недостаточно символов в строке';
-            }
-        } else {
-            $errors['email'] = 'Заполните поле email';
-        }
-
-        if (isset($data['phone'])) {
-            $phone = $data['phone'];
-
-            if (!preg_match('/^\d+$/', $phone)) {
-                $errors['phone'] = 'Недопустимый номер телефона';
-            } elseif(strlen($phone) != 11) {
-                $errors['phone'] = 'Доступна только для Российских номеров';
-            } elseif (!in_array($phone[0], ['7', '8'])) {
-                $errors['phone'] = 'Номер телефона может начинаться только с 7 или 8';
-            }
-        } else {
-            $errors['phone'] = 'Заполните поле phone';
-        }
-
-        if (isset($data['name'])) {
-            $name = $data['name'];
-
-            if (!preg_match('/^[a-zA-Zа-яА-Я\s]+$/', $name)) {
-               $errors['name'] = 'Неккоректно введён поле name';
-            } elseif (strlen($name) < 8) {
-                $errors['name'] = 'Недостаточно символов в строке';
-            }
-        } else {
-            $errors['name'] = 'Заполните поле name';
-        }
-        if (isset($data['address'])) {
-            $address = $data['address'];
-
-            if (strlen($address) < 3) {
-                $errors['address'] = 'Недостаточно символов в строке';
-            }
-        } else {
-            $errors['address'] = 'Заполните поле address';
-        }
-
-        if (isset($data['city'])) {
-            $city = $data['city'];
-
-            if (strlen($city) < 2) {
-                $errors['city'] = 'Недостаточно символов в строке';
-            }
-        } else {
-            $errors['city'] = 'Заполните поле city';
-        }
-
-        if (isset($data['country'])) {
-            $country = $data['country'];
-        } else {
-            $errors['country'] = 'Заполните поле country';
-        }
-
-        if (isset($data['postal'])) {
-            $postal = $data['postal'];
-
-            if (!preg_match('/^\d+$/', $postal)) {
-                $errors['postal'] = 'Неккоректно ведён поле postal';
-            }
-        } else {
-            $errors['postal'] = 'Заполните поле postal';
-        }
-        return  $errors;
     }
 }
