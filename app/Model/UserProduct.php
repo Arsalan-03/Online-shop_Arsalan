@@ -31,11 +31,11 @@ class UserProduct extends Model
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
     }
 
-    public function getAllByUserId(int $userId): array
+    public function getCartProduct(int $userId): array|false
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id=:user_id");
+        $stmt = $this->pdo->prepare("SELECT name, image, price, user_products.user_id, user_products.quantity, user_products.product_id FROM products JOIN user_products ON products.id = user_products.product_id WHERE user_id=:user_id");
         $stmt->execute(['user_id' => $userId]);
-        return $stmt->fetchAll();
+        return $stmt->fetch();
     }
 
     public function getAllUserProducts(int $userId): array|false
@@ -46,10 +46,10 @@ class UserProduct extends Model
        return $stmt->fetchAll();
     }
 
-    public function deleteProduct(int $userId, int $productId): array|false
+    public function deleteProduct(int $userId): array|false
     {
-        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id=:user_id AND product_id=:product_id");
-        $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id=:user_id");
+        $stmt->execute(['user_id' => $userId]);
 
         return $stmt->fetch();
     }

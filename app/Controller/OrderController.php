@@ -2,18 +2,22 @@
 
 namespace Controller;
 
+use http\Exception\BadUrlException;
 use Model\Order;
+use Model\OrderProduct;
 use Model\UserProduct;
 
 class OrderController
 {
     private Order $order;
     private UserProduct $userProduct;
+    private OrderProduct $orderProduct;
 
     public function __construct()
     {
         $this->order = new Order();
         $this->userProduct = new UserProduct();
+        $this->orderProduct = new OrderProduct();
     }
 
     public function getOrders()
@@ -35,11 +39,25 @@ class OrderController
             header("Location: /login");
         }
 
-       $errors = $this->validateOrders($data);
-
-        if (empty($errors)) {
             $userId = $_SESSION['user_id'];
 
+            $orderId = $this->createOrder($data);
+
+            $productsInCart = $this->userProduct->getCartProduct($userId);
+
+           foreach ($productsInCart as $product) {
+               $this->orderProduct->addReadyOrder($orderId['id'], $product['user_id'], $product['product_id'], $product['quantity']);
+           }
+        $this->userProduct->deleteProduct($userId);
+
+        require_once './../View/order.php';
+    }
+
+    private function createOrder(array $data): void
+    {
+        $errors = $this->validateOrders($data);
+
+        if (empty($errors)) {
             $email = $data['email'];
             $phone = $data['phone'];
             $name = $data['name'];
@@ -48,12 +66,8 @@ class OrderController
             $country = $data['country'];
             $postal = $data['postal'];
 
-           $productId['product_id'] = $this->order->addOrder($email, $phone, $name, $address, $city, $country, $postal);
-           $this->userProduct->getOneByUserIdProductId($userId, $productId);
-           $this->userProduct->deleteProduct($userId, $productId);
+            $this->order->addOrder($email, $phone, $name, $address, $city, $country, $postal);
         }
-
-        require_once './../View/order.php';
     }
 
     private function validateOrders(array $data): array

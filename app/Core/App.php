@@ -11,66 +11,7 @@ use Controller\UserController;
 class App
 {
     private array $routes = [
-        '/registrate' => [
-            'GET' => [
-                'class' => UserController::class,
-                'method' => 'getRegistrate',
-            ],
-            'POST' => [
-                'class' => UserController::class,
-                'method' => 'registrate',
-            ],
-        ],
-        '/login' => [
-            'GET' => [
-                'class' => UserController::class,
-                'method' => 'getLogin',
-            ],
-            'POST' => [
-                'class' => UserController::class,
-                'method' => 'login',
-            ],
-        ],
-        '/main' => [
-            'GET' => [
-                'class' => MainController::class,
-                'method' => 'getProducts',
-            ],
-        ],
-        '/cart' => [
-            'GET' => [
-                'class' => CartController::class,
-                'method' => 'getCart',
-            ],
-        ],
-        '/logout' => [
-            'POST' => [
-                'class' => UserController::class,
-                'method' => 'logout',
-            ],
-        ],
-        '/add-product' => [
-            'POST' => [
-                'class' => ProductController::class,
-                'method' => 'addProduct',
-            ],
-        ],
-        '/delete-product' => [
-            'POST' => [
-                'class' => ProductController::class,
-                'method' => 'deleteProduct',
-            ],
-        ],
-        '/order' => [
-            'GET' => [
-                'class' => OrderController::class,
-                'method' => 'getOrders'
-            ],
-            'POST' => [
-                'class' => OrderController::class,
-                'method' => 'orders'
-            ],
-        ],
+
     ];
 
 
@@ -97,5 +38,40 @@ class App
         } else {
             require_once './../View/404.html';
         }
+    }
+
+    public function get(string $route, string $class, string $method, string $requestClass = null)
+    {
+        $this->routes[$route]['GET'] = [
+            'class' => $class,
+            'method' => $method,
+            'request' => $requestClass
+        ];
+    }
+    public function post(string $route, string $class, string $method, string $requestClass = null)
+    {
+        $this->routes[$route]['POST'] = [
+            'class' => $class,
+            'method' => $method,
+            'request' => $requestClass
+        ];
+    }
+
+    public function pull(string $route, string $class, string $method, string $requestClass = null)
+    {
+        $this->routes[$route]['PULL'] = [
+            'class' => $class,
+            'method' => $method,
+            'request' => $requestClass
+        ];
+    }
+
+    public function delete(string $route, string $class, string $method, string $requestClass = null)
+    {
+        $this->routes[$route]['DELETE'] = [
+            'class' => $class,
+            'method' => $method,
+            'request' => $requestClass
+        ];
     }
 }
