@@ -10,9 +10,8 @@ class Order extends Model
        $statement->execute(['email' => $email, 'phone' => $phone, 'name' => $name, 'address' => $address, 'city' => $city, 'country' => $country, 'postal' => $postal]);
     }
 
-    public function getUserOrder(string $email):void
+    public function getOrderId()
     {
-        $statement = $this->pdo->prepare("SELECT id FROM orders WHERE email=:email");
-        $statement->execute(['email' => $email]);
+        return $this->pdo->lastInsertId();
     }
 }

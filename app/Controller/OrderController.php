@@ -43,12 +43,12 @@ class OrderController
         $userId = $_SESSION['user_id'];
 
         $this->createOrder($request);
-        $email = $request->getEmail();
+        $orderId = $this->order->getOrderId();
 
         $productsInCart = $this->userProduct->getCartProduct($userId);
 
         foreach ($productsInCart as $product) {
-            $this->orderProduct->addReadyOrder($orderId['id'], $product['user_id'], $product['product_id'], $product['quantity']);
+            $this->orderProduct->addReadyOrder($orderId, $product['user_id'], $product['product_id'], $product['quantity']);
         }
         $this->userProduct->deleteProduct($userId);
 
