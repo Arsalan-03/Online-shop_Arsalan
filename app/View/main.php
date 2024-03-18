@@ -19,14 +19,14 @@ if (empty($products)) {
         <form action="/add-product" method="POST">
             <div class="card text-center">
 
-                    <p class="card-text text-muted"><h1> <?php echo $product['name']; ?> </h1>
-                    <img class="card-img-top" src=" <?php echo $product['image']; ?>" alt="Card image" style="width: 250px; height: 300px;>
+                    <p class="card-text text-muted"><h1> <?php echo $product->getName(); ?> </h1>
+                    <img class="card-img-top" src=" <?php echo $product->getImage(); ?>" alt="Card image" style="width: 250px; height: 300px;>
                 <div class="card-body">
-                    <a href="#"><h4 class="card-title"><?php echo $product['info']; ?></h4></a>
+                    <a href="#"><h4 class="card-title"><?php echo $product->getInfo(); ?></h4></a>
                     <div class="card-footer">
-                        <h2> <?php echo '$' . $product['price']; ?></h2>
+                        <h2> <?php echo '$' . $product->getPrice(); ?></h2>
                     </div>
-                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
             </div>
             <div class="input-box">
                 <?php echo $errors['quantity'] ?? ''; ?>
@@ -35,8 +35,8 @@ if (empty($products)) {
             <button class="add-to-cart" id='test'>+</button>
         </form>
         <form action="/delete-product" method="POST">
-            <input type="hidden" name="quantity" value="<?php echo $product['quantity'] ?? '1';?>">
-            <input type="hidden" name="product_id" value="<?php echo $product['id'];  ?>">
+            <input type="hidden" name="quantity" value="<?php echo $product->getQuantity() ?? '1';?>">
+            <input type="hidden" name="product_id" value="<?php echo $product->getProduct();  ?>">
             <button class="add-to-cart" id='test' value="">-</button>
         </form>
 

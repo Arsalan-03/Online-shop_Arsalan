@@ -33,11 +33,12 @@ class OrderController
         require_once './../View/order.php';
     }
 
-    public function orders(OrderRequest $request): void
+    public function order(OrderRequest $request): void
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
+            
         }
 
         $userId = $_SESSION['user_id'];
@@ -50,7 +51,8 @@ class OrderController
         foreach ($productsInCart as $product) {
             $this->orderProduct->addReadyOrder($orderId, $product['user_id'], $product['product_id'], $product['quantity']);
         }
-        $this->userProduct->deleteProduct($userId);
+        $this->userProduct->deleteProducts($userId);
+        header("Location: /main");
 
         require_once './../View/order.php';
     }

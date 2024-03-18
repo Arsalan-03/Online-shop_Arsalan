@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 use Model\User;
+use Request\LoginRequest;
 use Request\RegistrateRequest;
 
 class UserController
@@ -40,36 +41,21 @@ class UserController
         require_once './../View/login.php';
     }
 
-    public function login(array $data): void
+    public function login(LoginRequest $request): void
     {
-        $errors = $this->logValidate($data);
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $user = $this->modelUser->getOneByEmail($data['email']);
+            $user = $this->modelUser->getOneByEmail($request->getEmail());
 
             session_start();
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id'] = $user->getId();
             header("Location: /main");
         }
         require_once './../View/login.php';
     }
 
-    private function logValidate(array $data): array
-    {
-        $errors = [];
-
-        $email = $data['email'];
-        $password = $data['password'];
-
-        $user = $this->modelUser->getOneByEmail($email);
-        if (empty($user)) {
-            $errors['email'] = 'Пользователя не существует';
-        } elseif (!password_verify($password, $user['password'])) {
-            $errors['password'] = 'Неправильный логин или пароль';
-        }
-        return $errors;
-    }
-    public function logout(): void
+    public function logout(RegistrateRequest $request): void
     {
         session_start();
 

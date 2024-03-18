@@ -4,6 +4,7 @@ namespace Controller;
 
 use Model\Product;
 use Model\UserProduct;
+use Request\ProductRequest;
 
 class ProductController
 {
@@ -15,7 +16,7 @@ class ProductController
         $this->userProduct = new UserProduct();
         $this->productModel = new Product();
     }
-    public function addProduct(array $data): void
+    public function addProduct(ProductRequest $request): void
     {
         session_start();
 
@@ -26,11 +27,11 @@ class ProductController
 
         $userId = $_SESSION['user_id'];
 
-        $productId = $data['product_id'];
+        $productId = $request->getProduct();
 
-        $quantity = $data['quantity'];
+        $quantity = $request->getQuantity();
 
-        $errors = $this->productValidate($quantity);
+        $errors = $request->validate($quantity);
 
         if (empty($errors)) {
 
@@ -48,18 +49,7 @@ class ProductController
         }
     }
 
-    private function productValidate(string $quantity): array
-    {
-        $errors = [];
-
-        if ($quantity <= 0) {
-
-            $errors['quantity'] = "Вы ввели неккоректное значение, попробуйте снова";
-        }
-        return $errors;
-    }
-
-    public function deleteProduct(array $data): void
+    public function deleteProduct(ProductRequest $request): void
     {
         session_start();
 
@@ -68,7 +58,7 @@ class ProductController
         }
 
         $userId = $_SESSION['user_id'];
-        $productId = $data['product_id'];
+        $productId = $request->getProduct();
 
         $this->userProduct->updateQuantityMinus($userId, $productId);
 

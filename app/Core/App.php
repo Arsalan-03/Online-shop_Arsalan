@@ -15,7 +15,6 @@ class App
 
     ];
 
-
     public function run()
     {
         $requestUri = $_SERVER['REQUEST_URI'];
