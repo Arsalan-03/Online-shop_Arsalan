@@ -1,12 +1,13 @@
 <?php
-namespace Model;
+namespace Repository;
 
-use Entity\UserEntity;
-use Model\Model;
+use Entity\Product;
+use Entity\User;
+use Repository\Repository;
 
-class User extends Model
+class UserRepository extends Repository
 {
-    public function getOneByEmail(string $email): UserEntity|null
+    public function getOneByEmail(string $email): User|null
     {
         $statement = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
         $statement->execute(['email' => $email]);
@@ -17,7 +18,7 @@ class User extends Model
             return null;
         }
 
-        return new UserEntity($user['id'], $user['name'], $user['email'], $user['password']);
+        return $this->hydrate($user);
     }
 
     public function create(string $name, string $email, string $password)
@@ -26,4 +27,8 @@ class User extends Model
         $statement->execute(['name' => $name, 'email' => $email, 'password' => $password]);
     }
 
+    public function hydrate(array $data): User
+    {
+        return new User($data['id'], $data['name'], $data['email'], $data['password']);
+    }
 }

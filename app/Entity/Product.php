@@ -2,7 +2,7 @@
 
 namespace Entity;
 
-class ProductEntity
+class Product
 {
     private int $id;
     private string $name;

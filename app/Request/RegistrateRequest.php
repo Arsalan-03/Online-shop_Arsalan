@@ -2,16 +2,16 @@
 
 namespace Request;
 
-use Model\User;
+use Repository\UserRepository;
 
 class RegistrateRequest extends Request
 {
-    private User $modelUser;
+    private UserRepository $modelUser;
 
     public function __construct(array $body)
     {
         parent::__construct($body);
-        $this->modelUser = new User();
+        $this->modelUser = new UserRepository();
     }
 
     public function getName()

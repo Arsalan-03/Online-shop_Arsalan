@@ -2,19 +2,19 @@
 
 namespace Controller;
 
-use Model\Product;
-use Model\UserProduct;
+use Repository\ProductRepository;
+use Repository\UserProductRepository;
 use Request\ProductRequest;
 
 class ProductController
 {
-    private UserProduct $userProduct;
-    private Product $productModel;
+    private UserProductRepository $userProduct;
+    private ProductRepository $productModel;
 
     public function __construct()
     {
-        $this->userProduct = new UserProduct();
-        $this->productModel = new Product();
+        $this->userProduct = new UserProductRepository();
+        $this->productModel = new ProductRepository();
     }
     public function addProduct(ProductRequest $request): void
     {

@@ -1,16 +1,16 @@
 <?php
 namespace Controller;
-use Model\User;
+use Repository\UserRepository;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 
 class UserController
 {
-    private User $modelUser;
+    private UserRepository $modelUser;
 
     public function __construct()
     {
-        $this->modelUser = new User();
+        $this->modelUser = new UserRepository();
     }
     public function getRegistrate()
     {

@@ -3,22 +3,22 @@
 namespace Controller;
 
 use http\Exception\BadUrlException;
-use Model\Order;
-use Model\OrderProduct;
-use Model\UserProduct;
+use Repository\OrderRepository;
+use Repository\OrderProductRepository;
+use Repository\UserProductRepository;
 use Request\OrderRequest;
 
 class OrderController
 {
-    private Order $order;
-    private UserProduct $userProduct;
-    private OrderProduct $orderProduct;
+    private OrderRepository $order;
+    private UserProductRepository $userProduct;
+    private OrderProductRepository $orderProduct;
 
     public function __construct()
     {
-        $this->order = new Order();
-        $this->userProduct = new UserProduct();
-        $this->orderProduct = new OrderProduct();
+        $this->order = new OrderRepository();
+        $this->userProduct = new UserProductRepository();
+        $this->orderProduct = new OrderProductRepository();
     }
 
     public function getOrders()
