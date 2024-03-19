@@ -34,7 +34,7 @@ class CartController
         $totalPrice = 0;
 
             foreach ($userProducts as $userProduct) {
-                $totalPrice += $userProduct['price'] * $userProduct['quantity'];
+                $totalPrice += $userProduct->getProduct()->getPrice() * $userProduct->getQuantity();
             }
 
         return $totalPrice;

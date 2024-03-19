@@ -27,10 +27,10 @@ if (empty($userProducts)) {
             <!-- shopping cart contents -->
             <tr class="productitm">
 
-                <td><img src="<?php echo $userProduct['image']; ?>" alt="Card image" style="width: 55px; height: 65px; class="thumb"></td>
-                <td> <h1 style="color: #161623"> <?php echo $userProduct['quantity']; ?> </h1></td>
-                <td> <h2> <?php echo $userProduct['name']; ?> </h2></td>
-                <td> <?php echo '$' . $userProduct['price'] * $userProduct['quantity']; ?></td>
+                <td><img src="<?php echo $userProduct->getProduct()->getImage(); ?>" alt="Card image" style="width: 55px; height: 65px; class="thumb"></td>
+                <td> <h1 style="color: #161623"> <?php echo $userProduct->getQuantity(); ?> </h1></td>
+                <td> <h2> <?php echo $userProduct->getProduct()->getName(); ?> </h2></td>
+                <td> <?php echo '$' . $userProduct->getProduct()->getPrice() * $userProduct->getQuantity(); ?></td>
                 <td><span class="remove"><img src="https://i.imgur.com/h1ldGRr.png" alt="X"></span></td>
             </tr>
             <?php endforeach;

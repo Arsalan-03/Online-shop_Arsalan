@@ -1,6 +1,8 @@
 <?php
 namespace Repository;
 
+use Entity\Product;
+use Entity\User;
 use Entity\UserProduct;
 use Repository\Repository;
 
@@ -12,9 +14,14 @@ class UserProductRepository extends Repository
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'quantity' => $quantity]);
     }
 
-    public function getOneByUserIdProductId(int $userId, int $productId): UserProduct|null
+    public function getOneByUserIdProductId(int $userId, int $productId): ?UserProduct
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id=:user_id and product_id=:product_id");
+        $stmt = $this->pdo->prepare("
+        SELECT * FROM user_products 
+        JOIN products ON user_products.product_id = products.id 
+        JOIN users ON user_products.user_id = users.id 
+        WHERE user_id=:user_id AND product_id=:product_id
+    ");
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
 
         $product = $stmt->fetch();
@@ -23,8 +30,13 @@ class UserProductRepository extends Repository
             return null;
         }
 
-        return $this->hydrate($product);
+        $user = new User($product['id'], $product['name'], $product['email'], $product['password']);
+        $productObj = new Product($product['id'], $product['product_name'], $product['product_image'], $product['product_info'], $product['product_price']);
+        $userProductObj = new UserProduct($product['id'], $user, $productObj, $product['quantity']);
+
+        return $userProductObj;
     }
+
 
     public function updateQuantityPlus(int $quantity, int $userId, int $productId): void
     {
@@ -40,7 +52,9 @@ class UserProductRepository extends Repository
 
     public function getCartProduct(int $userId): UserProduct|null
     {
-        $stmt = $this->pdo->prepare("SELECT user_products.user_id, user_products.quantity, user_products.product_id FROM products JOIN user_products ON products.id = user_products.product_id WHERE user_id=:user_id");
+        $stmt = $this->pdo->prepare("SELECT user_products.user_id, user_products.quantity, user_products.product_id FROM products
+            JOIN user_products ON products.id = user_products.product_id 
+            WHERE user_id=:user_id");
         $stmt->execute(['user_id' => $userId]);
         $cart = $stmt->fetchAll();
 
@@ -54,21 +68,22 @@ class UserProductRepository extends Repository
     public function getAllUserProducts(int $userId): array
     {
        $stmt = $this->pdo->prepare("SELECT * FROM user_products 
-         JOIN products ON products.id = user_products.product_id 
-         JOIN users ON users.id = user_products.user_id
+         JOIN products ON user_products.product_id = products.id 
+         JOIN users ON user_products.user_id = users.id 
          WHERE user_id=:user_id
          ");
        $stmt->execute(['user_id' => $userId]);
-
        $userProducts = $stmt->fetchAll();
-       $result = [];
+
+       $array = [];
        foreach ($userProducts as $userProduct) {
-           $userProductModel = new UserProductRepository($userProduct['user_products.id'], $userProduct['user_id'], $userProduct['user_products.product_id'], $userProduct['quantity']);
-           $product = new ProductRepository($userProduct['product.id'], $userProduct['product.name'], $userProduct['image'], $userProduct['price']);
-           $user = new UserRepository($userProduct['user.id'], $userProduct['user.name'], $userProduct['email'], $userProduct['password']);
-           $result[] = new UserProduct($userProductModel['id'], $userProductModel['user_id'], $userProductModel['product_id'], $userProductModel['quantity']);
+           $user = new User($userProduct['id'], $userProduct['name'], $userProduct['email'], $userProduct['password']);
+           $product = new Product($userProduct['id'], $userProduct['product_name'], $userProduct['product_image'], $userProduct['product_info'], $userProduct['product_price']);
+           $userProductObj = new UserProduct($userProduct['id'], $user, $product, $userProduct['quantity']);
+
+           $array[] = $userProductObj;
        }
-       return $result;
+       return $array;
     }
 
     public function deleteProducts(int $userId): array|false

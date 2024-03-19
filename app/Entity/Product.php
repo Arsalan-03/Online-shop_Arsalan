@@ -9,8 +9,9 @@ class Product
     private string $image;
     private string $info;
     private int $price;
+    private int $quantity;
 
-    public function __construct(int $id, string $name, string $image, string $info, string $price)
+    public function __construct(int $id, string $name, string $image, string $info, int $price)
     {
         $this->id = $id;
         $this->name = $name;
@@ -43,4 +44,10 @@ class Product
     {
         return $this->price;
     }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
 }
+

@@ -5,15 +5,15 @@ namespace Entity;
 class UserProduct
 {
     private int $id;
-    private int $user_id;
-    private int $product_id;
+    private User $user;
+    private Product $product;
     private int $quantity;
 
-    public function __construct(int $id, int $user_id, int $product_id, int $quantity)
+    public function __construct(int $id, User $user, Product $product, int $quantity)
     {
         $this->id = $id;
-        $this->user_id = $user_id;
-        $this->product_id = $product_id;
+        $this->user = $user;
+        $this->product = $product;
         $this->quantity = $quantity;
     }
 
@@ -22,14 +22,14 @@ class UserProduct
         return $this->id;
     }
 
-    public function getUserId(): int
+    public function getUser(): User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function getProductId(): int
+    public function getProduct(): Product
     {
-        return $this->product_id;
+        return $this->product;
     }
 
     public function getQuantity(): int

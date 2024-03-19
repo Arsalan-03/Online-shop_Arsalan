@@ -35,7 +35,8 @@ class ProductController
 
         if (empty($errors)) {
 
-            if (empty($this->userProduct->getOneByUserIdProductId($userId, $productId))) {
+            $userProduct = $this->userProduct->getOneByUserIdProductId($userId, $productId);
+            if (empty($userProduct)) {
                 $this->userProduct->addProduct($userId, $productId, $quantity);
             } else {
                 $this->userProduct->updateQuantityPlus($quantity, $userId, $productId);

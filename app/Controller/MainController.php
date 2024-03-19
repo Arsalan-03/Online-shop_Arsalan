@@ -27,7 +27,7 @@ class MainController
 
             $totalQuantity = 0;
             foreach ($cartProducts as $cartProduct) {
-                $totalQuantity += $cartProduct['quantity'];
+                $totalQuantity += $cartProduct->getQuantity();
             }
             require_once './../View/main.php';
         }

@@ -21,6 +21,6 @@ class ProductRepository extends Repository
 
     public function hydrate(array $data): Product
     {
-        return new Product($data['id'], $data['name'], $data['image'], $data['info'], $data['price']);
+        return new Product($data['id'], $data['product_name'], $data['product_image'], $data['product_info'], $data['product_price']);
     }
 }

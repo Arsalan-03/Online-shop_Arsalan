@@ -36,9 +36,6 @@ $app->post('/delete-product', ProductController::class, 'deleteProducts', Produc
 $app->post('/order', OrderController::class, 'order', OrderRequest::class);
 
 $app->run();
-
-
-
 //require_once './../Controller/UserController.php';
 //require_once './../Controller/MainController.php';
 

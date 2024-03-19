@@ -4,9 +4,12 @@ namespace Repository;
 
 class OrderProductRepository extends Repository
 {
-    public function addReadyOrder(int $orderId, int $userId, int $productId, int $quantity): void
+    public function addOrderProduct(int $userId, int $orderId)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO order_products(order_id, user_id, product_id, quantity) VALUES (:order_id, :user_id, :product_id, :quantity)");
-        $stmt->execute(['order_id' => $orderId, 'user_id' => $userId, 'product_id' => $productId, 'quantity' => $quantity]);
+        $statement = $this->pdo->prepare("INSERT INTO order_products(order_id, user_id, product_id, quantity)
+                                    SELECT :order_id, user_id, product_id, quantity
+                                    FROM user_products
+                                    WHERE user_id=:user_id");
+        $statement->execute(['user_id' => $userId, 'order_id' => $orderId]);
     }
 }

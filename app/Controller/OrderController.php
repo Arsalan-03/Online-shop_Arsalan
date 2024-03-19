@@ -2,7 +2,6 @@
 
 namespace Controller;
 
-use http\Exception\BadUrlException;
 use Repository\OrderRepository;
 use Repository\OrderProductRepository;
 use Repository\UserProductRepository;
@@ -46,11 +45,7 @@ class OrderController
         $this->createOrder($request);
         $orderId = $this->order->getOrderId();
 
-        $productsInCart = $this->userProduct->getCartProduct($userId);
-
-        foreach ($productsInCart as $product) {
-            $this->orderProduct->addReadyOrder($orderId, $product['user_id'], $product['product_id'], $product['quantity']);
-        }
+        $this->orderProduct->addOrderProduct($userId, $orderId);
         $this->userProduct->deleteProducts($userId);
         header("Location: /main");
 
