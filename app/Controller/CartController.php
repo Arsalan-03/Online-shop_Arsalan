@@ -4,39 +4,31 @@ namespace Controller;
 
 use Repository\ProductRepository;
 use Repository\UserProductRepository;
+use Service\AuthenticationService;
+use Service\CartService;
 
 class CartController
 {
-    private UserProductRepository $userProduct;
+    private AuthenticationService $authenticationService;
+    private CartService $cartService;
 
     public function __construct()
     {
-        $this->userProduct = new UserProductRepository();
+        $this->authenticationService = new AuthenticationService();
+        $this->cartService = new CartService();
     }
     public function getCart(): void
     {
-        session_start();
-
-        if (!isset($_SESSION['user_id'])) {
+       if (!$this->authenticationService->check()) {
             header("Location: /login");
         } else {
-            $userId = $_SESSION['user_id'];
+           $user = $this->authenticationService->getCurrentUser();
+           $userId = $user->getId();
 
-            $userProducts = $this->userProduct->getAllUserProducts($userId);
-            $totalPrice = $this->totalPrice($userProducts);
+           $userProducts = $this->cartService->getProducts();
+           $totalPrice = $this->cartService->getTotalPrice($userId);
 
             require_once './../View/cart.php';
         }
-    }
-
-    public function totalPrice(array $userProducts): float
-    {
-        $totalPrice = 0;
-
-            foreach ($userProducts as $userProduct) {
-                $totalPrice += $userProduct->getProduct()->getPrice() * $userProduct->getQuantity();
-            }
-
-        return $totalPrice;
     }
 }

@@ -35,7 +35,9 @@ if (empty($products)) {
             <button class="add-to-cart" id='test'>+</button>
         </form>
         <form action="/delete-product" method="POST">
+<!--            --><?php //if ($userProduct = $userProducts[$product->getId()]): ?>
             <input type="hidden" name="quantity" value="1">
+<!--            --><?php //endif; ?>
 <!--            --><?php //echo $product->getQuantity() ?? '1';?>
             <input type="hidden" name="product_id" value="<?php echo $product->getId();  ?>">
             <button class="add-to-cart" id='test' value="">-</button>

@@ -10,7 +10,7 @@ class OrderRepository extends Repository
        $statement->execute(['email' => $email, 'phone' => $phone, 'name' => $name, 'address' => $address, 'city' => $city, 'country' => $country, 'postal' => $postal]);
     }
 
-    public function getOrderId()
+    public function getOrderId(): int
     {
         return $this->pdo->lastInsertId();
     }

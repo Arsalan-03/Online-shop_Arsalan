@@ -5,28 +5,29 @@ namespace Controller;
 use Repository\ProductRepository;
 use Repository\UserProductRepository;
 use Request\ProductRequest;
+use Service\AuthenticationService;
+use Service\CartService;
+use Service\ProductService;
 
 class ProductController
 {
-    private UserProductRepository $userProduct;
     private ProductRepository $productModel;
+    private AuthenticationService $authenticationService;
+    private CartService $cartService;
 
     public function __construct()
     {
-        $this->userProduct = new UserProductRepository();
         $this->productModel = new ProductRepository();
+        $this->authenticationService = new AuthenticationService();
+        $this->cartService = new CartService();
     }
     public function addProduct(ProductRequest $request): void
     {
-        session_start();
-
-        if (!isset($_SESSION['user_id'])) {
-
-            header("Location: /login.php");
+        if (!$this->authenticationService->check()) {
+            header("Location: /login");
         }
-
-        $userId = $_SESSION['user_id'];
-
+        $user = $this->authenticationService->getCurrentUser();
+        $userId = $user->getId();
         $productId = $request->getProduct();
 
         $quantity = $request->getQuantity();
@@ -34,13 +35,7 @@ class ProductController
         $errors = $request->validate($quantity);
 
         if (empty($errors)) {
-
-            $userProduct = $this->userProduct->getOneByUserIdProductId($userId, $productId);
-            if (empty($userProduct)) {
-                $this->userProduct->addProduct($userId, $productId, $quantity);
-            } else {
-                $this->userProduct->updateQuantityPlus($quantity, $userId, $productId);
-            }
+            $this->cartService->addProduct($quantity, $productId);
 
             header("Location: /main");
         } else {
@@ -52,16 +47,15 @@ class ProductController
 
     public function deleteProduct(ProductRequest $request): void
     {
-        session_start();
-
-        if (!isset($_SESSION['user_id'])) {
+        if (!$this->authenticationService->check()) {
             header("Location: /login");
         }
 
-        $userId = $_SESSION['user_id'];
-        $productId = $request->getProduct();
+        $user = $this->authenticationService->getCurrentUser();
+        $userId = $user->getId();
 
-        $this->userProduct->updateQuantityMinus($userId, $productId);
+        $productId = $request->getProduct();
+        $this->cartService->clearCartByUserIdProductId($productId);
 
         header("Location: /main");
     }

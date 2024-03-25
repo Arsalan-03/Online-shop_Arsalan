@@ -14,14 +14,13 @@ class UserProductRepository extends Repository
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'quantity' => $quantity]);
     }
 
-    public function getOneByUserIdProductId(int $userId, int $productId): ?UserProduct
+    public function getOneByUserIdProductId(int $userId, int $productId): UserProduct|null
     {
-        $stmt = $this->pdo->prepare("
-        SELECT * FROM user_products 
-        JOIN products ON user_products.product_id = products.id 
-        JOIN users ON user_products.user_id = users.id 
-        WHERE user_id=:user_id AND product_id=:product_id
-    ");
+        $stmt = $this->pdo->prepare("SELECT up.id AS id, u.id AS user_id, u.name AS user_name, u.email, u.password, 
+        p.id AS product_id, p.name AS product_name, p.image, p.info, p.price, up.quantity FROM user_products up
+        JOIN users u ON up.user_id = u.id
+        JOIN products p ON up.product_id = p.id
+        WHERE u.id = :user_id AND p.id = :product_id");
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
 
         $product = $stmt->fetch();
@@ -29,12 +28,7 @@ class UserProductRepository extends Repository
         if (empty($product)) {
             return null;
         }
-
-        $user = new User($product['id'], $product['name'], $product['email'], $product['password']);
-        $productObj = new Product($product['id'], $product['product_name'], $product['product_image'], $product['product_info'], $product['product_price']);
-        $userProductObj = new UserProduct($product['id'], $user, $productObj, $product['quantity']);
-
-        return $userProductObj;
+        return $this->hydrate($product);
     }
 
 
@@ -62,26 +56,22 @@ class UserProductRepository extends Repository
             return null;
         }
 
-        return $this->hydrate($cart);
+        return new UserProduct($cart['id'], $cart['user_id'], $cart['product_id'], $cart['quantity']);
     }
 
     public function getAllUserProducts(int $userId): array
     {
-       $stmt = $this->pdo->prepare("SELECT * FROM user_products 
-         JOIN products ON user_products.product_id = products.id 
-         JOIN users ON user_products.user_id = users.id 
-         WHERE user_id=:user_id
-         ");
+        $stmt = $this->pdo->prepare("SELECT up.id AS id, u.id AS user_id, u.name AS user_name, u.email, u.password, 
+        p.id AS product_id, p.name AS product_name, p.image, p.info, p.price, up.quantity FROM user_products up
+        JOIN users u ON up.user_id = u.id
+        JOIN products p ON up.product_id = p.id
+        WHERE u.id = :user_id;");
        $stmt->execute(['user_id' => $userId]);
        $userProducts = $stmt->fetchAll();
 
        $array = [];
        foreach ($userProducts as $userProduct) {
-           $user = new User($userProduct['id'], $userProduct['name'], $userProduct['email'], $userProduct['password']);
-           $product = new Product($userProduct['id'], $userProduct['product_name'], $userProduct['product_image'], $userProduct['product_info'], $userProduct['product_price']);
-           $userProductObj = new UserProduct($userProduct['id'], $user, $product, $userProduct['quantity']);
-
-           $array[] = $userProductObj;
+           $array[$userProduct['product_id']] = $this->hydrate($userProduct);
        }
        return $array;
     }
@@ -94,8 +84,12 @@ class UserProductRepository extends Repository
         return $stmt->fetch();
     }
 
-    public function hydrate(array $data): UserProduct
+    public function hydrate(array $userProduct): UserProduct
     {
-        return new UserProduct($data['id'], $data['user_id'], $data['product_id'], $data['quantity']);
+        return new UserProduct($userProduct['id'],
+            new User($userProduct['user_id'],$userProduct['user_name'],$userProduct['email'],$userProduct['password']),
+            new Product($userProduct['product_id'],$userProduct['product_name'],$userProduct['image'],$userProduct['info'],$userProduct['price']),
+            $userProduct['quantity']);
     }
+
 }

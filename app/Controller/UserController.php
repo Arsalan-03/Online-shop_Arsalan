@@ -3,14 +3,17 @@ namespace Controller;
 use Repository\UserRepository;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
+use Service\AuthenticationService;
 
 class UserController
 {
     private UserRepository $modelUser;
+    private AuthenticationService $authenticationService;
 
     public function __construct()
     {
         $this->modelUser = new UserRepository();
+        $this->authenticationService = new AuthenticationService();
     }
     public function getRegistrate()
     {
@@ -46,23 +49,22 @@ class UserController
         $errors = $request->validate();
 
         if (empty($errors)) {
-            $user = $this->modelUser->getOneByEmail($request->getEmail());
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
-            session_start();
-            $_SESSION['user_id'] = $user->getId();
-            header("Location: /main");
+            if ($this->authenticationService->login($email, $password)) {
+                header("Location: /main");
+
+            } else {
+                $errors['email'] = 'Неправильный логин или пароль';
+            }
         }
         require_once './../View/login.php';
     }
 
     public function logout(RegistrateRequest $request): void
     {
-        session_start();
-
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            session_destroy();
-
-            header("Location: /login");
-        }
+        $this->authenticationService->logout();
+        header("Location: /login");
     }
 }

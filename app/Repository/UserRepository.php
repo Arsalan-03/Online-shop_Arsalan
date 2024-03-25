@@ -21,14 +21,28 @@ class UserRepository extends Repository
         return $this->hydrate($user);
     }
 
-    public function create(string $name, string $email, string $password)
+    public function create(string $name, string $email, string $password): void
     {
         $statement = $this->pdo->prepare("INSERT INTO users(name, email, password) VALUES (:name, :email, :password)");
         $statement->execute(['name' => $name, 'email' => $email, 'password' => $password]);
     }
 
-    public function hydrate(array $data): User
+    public function getUserById(string $userId): User|null
     {
-        return new User($data['id'], $data['name'], $data['email'], $data['password']);
+        $statement = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $statement->execute(['id' => $userId]);
+
+        $user = $statement->fetch();
+
+        if (empty($user)) {
+            return null;
+        }
+
+        return $this->hydrate($user);
+    }
+
+    public function hydrate(array $user): User
+    {
+        return new User($user['id'], $user['name'], $user['email'], $user['password']);
     }
 }
