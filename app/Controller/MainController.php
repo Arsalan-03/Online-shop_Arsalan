@@ -2,6 +2,7 @@
 namespace Controller;
 
 use Repository\ProductRepository;
+use Service\AuthenticationService\InterfaceAuthenticationService;
 use Service\AuthenticationService\SessionAuthenticationService;
 use Service\CartService;
 use Service\ProductService;
@@ -9,13 +10,13 @@ use Service\ProductService;
 class MainController
 {
     private ProductRepository $productModel;
-    private SessionAuthenticationService $authenticationService;
+    private InterfaceAuthenticationService $authenticationService;
     private CartService $cartService;
 
-    public function __construct()
+    public function __construct(InterfaceAuthenticationService $authenticationService)
     {
         $this->productModel = new ProductRepository();
-        $this->authenticationService = new SessionAuthenticationService();
+        $this->authenticationService = $authenticationService;
         $this->cartService = new CartService();}
     public function getProducts(): void
     {

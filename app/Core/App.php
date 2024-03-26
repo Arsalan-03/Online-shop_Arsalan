@@ -8,6 +8,7 @@ use Controller\OrderController;
 use Controller\ProductController;
 use Controller\UserController;
 use Request\Request;
+use Service\AuthenticationService\SessionAuthenticationService;
 
 class App
 {
@@ -29,7 +30,10 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
                 $requestClass = $handler['request'] ?? Request::class;
-                $obj = new $class;
+
+                $authService = new SessionAuthenticationService();
+
+                $obj = new $class($authService);
 
                 $request = new $requestClass($_POST);
                 $obj->$method($request);

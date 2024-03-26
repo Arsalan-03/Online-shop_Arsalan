@@ -4,118 +4,163 @@ if (empty($products)) {
     echo '<h1 style="color: red">Продуктов в Таблице нет</h1>';
 }
 ?>
-<div class="container">
-    <h1 style="color: darkred">Online_shop "Ice-Cream" </h1>
 
-    <a class="basket" href="http://localhost:81/cart" style="color: #0e4bf1; float: right; margin-left: 10px;">
-        <img src="https://png.pngtree.com/element_our/20190531/ourlarge/pngtree-shopping-cart-convenient-icon-image_1287807.jpg" alt="Cart" style="width: 75px; height: 75px;">
-        <?php if (isset($totalQuantity)): ?> <h2> <?php echo $totalQuantity . 'шт'; endif; ?> </h2>
+<div class="container">
+    <h1>Online Shop "Ice-Cream"</h1>
+
+    <a class="basket" href="http://localhost:81/cart">
+        <img src="https://png.pngtree.com/element_our/20190531/ourlarge/pngtree-shopping-cart-convenient-icon-image_1287807.jpg" alt="Cart">
+        <?php if (isset($totalQuantity)): ?>
+            <p class="totalQuantity"><?php echo $totalQuantity . ' шт'; ?></p>
+        <?php endif; ?>
     </a>
 
     <div class="card-deck">
         <?php if (isset($products)) {
-            foreach ($products as $product): ?>
-        <form action="/add-product" method="POST">
-            <div class="card text-center">
-
-                    <p class="card-text text-muted"><h1> <?php echo $product->getName(); ?> </h1>
-                    <img class="card-img-top" src=" <?php echo $product->getImage(); ?>" alt="Card image" style="width: 250px; height: 300px;>
-                <div class="card-body">
-                    <a href="#"><h4 class="card-title"><?php echo $product->getInfo(); ?></h4></a>
-                    <div class="card-footer">
-                        <h2> <?php echo '$' . $product->getPrice(); ?></h2>
-                    </div>
-                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+        foreach ($products as $product): ?>
+        <div class="card">
+            <h1><?php echo $product->getName(); ?></h1>
+            <img class="card-img-top" src="<?php echo $product->getImage(); ?>" alt="Card image">
+            <div class="card-body">
+                <a href="#"><h4 class="card-title"><?php echo $product->getInfo(); ?></h4></a>
             </div>
-            <div class="input-box">
-                <?php echo $errors['quantity'] ?? ''; ?>
-                <input type="number" name="quantity"  min="1" max="10">
+            <div class="card-footer">
+                <h2><?php echo '$' . $product->getPrice(); ?></h2>
             </div>
-            <button class="add-to-cart" id='test'>+</button>
-        </form>
-        <form action="/delete-product" method="POST">
-<!--            --><?php //if ($userProduct = $userProducts[$product->getId()]): ?>
-            <input type="hidden" name="quantity" value="1">
-<!--            --><?php //endif; ?>
-<!--            --><?php //echo $product->getQuantity() ?? '1';?>
-            <input type="hidden" name="product_id" value="<?php echo $product->getId();  ?>">
-            <button class="add-to-cart" id='test' value="">-</button>
-        </form>
-
+            <form action="/add-product" method="POST">
+                <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                <div class="input-box">
+                    <?php echo $errors['quantity'] ?? ''; ?>
+                    <input type="number" name="quantity" min="1" max="10">
+                </div>
+                <button class="add-to-cart">+</button>
+            </form>
+            <form action="/delete-product" method="POST">
+                <input type="hidden" name="quantity" value="1">
+                <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                <button class="add-to-cart">-</button>
+            </form>
         </div>
-        <?php endforeach; }?>
+        <?php endforeach;
+        }?>
+    </div>
 
     <form action="/logout" method="POST">
-        <button type="submit" class="logout"> <h1> Logout </h1></button>
+        <button type="submit" class="logout">Logout</button>
     </form>
+</div>
 
-    <style>
-    body {
-        font-style: sans-serif;
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
-    a {
+    h1 {
+        color: darkred;
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .basket {
+        color: #0e4bf1;
+        float: right;
+        margin-left: 10px;
         text-decoration: none;
     }
-    a:hover {
-        text-decoration: none;
+
+    .basket img {
+        width: 75px;
+        height: 75px;
     }
 
-    h3 {
-        line-height: 3em;
+    .totalQuantity {
+        margin: 0;
+        text-align: center;
+        font-size: 20px;
+        color: navy;
+    }
+
+    .card-deck {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
 
     .card {
-        max-width: 16rem;
+        width: 250px;
+        margin-bottom: 20px;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
     }
 
     .card:hover {
-        box-shadow: 1px 2px 10px lightgray;
-        transition: 0.2s;
+        transform: scale(1.05);
     }
 
-    .text-muted {
-        font-size: 11px;
+    .card-img-top {
+        width: 250px;
+        height: 300px;
+        object-fit: contain;
+        margin-bottom: 10px;
     }
 
-    .card-footer{
-        font-weight: bold;
+    .card-title {
+        margin: 0;
         font-size: 18px;
-        background-color: white;
+    }
+
+    .card-footer {
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    input[type="number"] {
+        width: 40px;
     }
 
     .add-to-cart {
+        display: block;
+        margin: 10px auto;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        text-align: center;
+        background-color: #f1f1f1;
         border: none;
         cursor: pointer;
-        display: block;
-        margin: 1%;
-        width: 10em;
-        height: 2em;
-        background: rgb(5, 5, 5);
-        color: white;
-        font-weight: bold;
-        border-radius: 20px;
+        transition: background-color 0.2s;
     }
 
     .add-to-cart:hover {
-        background: #0e4bf1;
-    }
-
-    .add-to-cart:active {
-        background: #0e4bf1;
+        background-color: #ddd;
     }
 
     .logout {
-        background-color: #ff0000;
-        color: #ffffff;
-        border: none;
+        display: block;
+        margin: 20px auto;
         padding: 10px 20px;
-        font-size: 16px;
+        font-size: 18px;
+        text-align: center;
+        background-color: #f1f1f1;
+        color: #333;
+        border: none;
         cursor: pointer;
+        transition: background-color 0.2s;
     }
 
-    .logout h1 {
-        font-size: 18px;
-        margin: 0;
+    .logout:hover {
+        background-color: #ddd;
+    }
+
+    body {
+        background-image: url("https://new-retail.ru/upload/iblock/eb5/5qhpoziurrlcm839m1ajd7vq4lpt5yzn.webp");
+        background-size: cover;
+        background-position: center;
     }
 </style>

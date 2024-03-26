@@ -1,12 +1,11 @@
 <header>
-    <h2 style="color: black">Checkout</h2>
+    <h2>Checkout</h2>
 </header>
 
 <main>
-
     <section class="checkout-form">
         <form action="/order" method="POST">
-            <h5 style="color: black">Contact information</h5>
+            <h5>Contact information</h5>
             <div class="form-control">
                 <label for="checkout-email">E-mail</label>
                 <label style="color: red"><?php echo $errors['email'] ?? ''; ?></label>
@@ -20,17 +19,17 @@
                 <label style="color: red"><?php echo $errors['postal'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-phone"></span>
-                    <input type="tel" name="phone" id="phone" placeholder="Enter you phone...">
+                    <input type="tel" name="phone" id="phone" placeholder="Enter your phone...">
                 </div>
             </div>
             <br>
-            <h5 style="color: black">Shipping address</h5>
+            <h5>Shipping address</h5>
             <div class="form-control">
                 <label for="name">Full name</label>
                 <label style="color: red"><?php echo $errors['name'] ?? ''; ?></label>
                 <div>
                     <span class="fa fa-user-circle"></span>
-                    <input type="text" id="name" name="name" placeholder="Enter you name...">
+                    <input type="text" id="name" name="name" placeholder="Enter your name...">
                 </div>
             </div>
             <div class="form-control">
@@ -83,215 +82,95 @@
             </div>
         </form>
     </section>
-
-
 </main>
 
 
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-    body {
-        font-family: "Poppins", sans-serif;
-        height: 100vh;
-        width: 70%;
-        margin: 0px auto;
-        padding: 50px 0px 0px;
-        color: #4E5150;
-
-
-        header {
-
-            height: 5%;
-            margin-bottom: 30px;
-
-            > h3 {
-                font-size: 25px;
-                color: #4E5150;
-                font-weight: 500;
-            }
-
-        }
-
-        main {
-            height: 85%;
-            display: flex;
-            column-gap: 100px;
-
-            .checkout-form  {
-                width: 50%;
-
-                form {
-
-                    h6 {
-                        font-size: 12px;
-                        font-weight: 500;
-                    }
-
-                    .form-control  {
-                        margin: 10px 0px;
-                        position: relative;
-                        color: black;
-                        color: red;
-
-                        label:not([for="checkout-checkbox"]) {
-                            display: block;
-                            font-size: 10px;
-                            font-weight: 500;
-                            margin-bottom: 2px;
-                        }
-
-                        input:not([type="checkbox"]) {
-                            width: 100%;
-                            padding: 10px 10px 10px 40px;
-                            border-radius: 10px;
-                            outline: none;
-                            border: .2px solid #4e515085;
-                            font-size: 12px;
-                            font-weight: 700;
-
-                            &::placeholder {
-                                font-size: 10px;
-                                font-weight: 500;
-                            }
-                        }
-
-                        label[for="checkout-checkbox"] {
-                            font-size: 9px;
-                            font-weight: 500;
-                            line-height: 10px;
-                        }
-
-                        > div {
-                            position: relative;
-
-                            span.fa {
-                                position: absolute;
-                                top: 50%;
-                                left: 0%;
-                                transform: translate(15px, -50%);
-                            }
-                        }
-                    }
-
-                    .form-group {
-                        display: flex;
-                        column-gap: 25px;
-                    }
-
-                    .checkbox-control {
-                        display: flex;
-                        align-items: center;
-                        column-gap: 10px;
-                    }
-
-                    .form-control-btn {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-end;
-
-                        button {
-                            padding: 15px 80px;
-                            font-size: 15px;
-                            color: #fff;
-                            background: #050505;
-                            border: 0;
-                            border-radius: 7px;
-                            letter-spacing: .5px;
-                            font-weight: 200;
-                            cursor: pointer;
-                        }
-                    }
-                }
-            }
-                                img {
-                                    width: 100%;
-                                    object-fit: fill;
-                                    border-radius: 10px;
-                                }
-                            }
-                                    span {
-                                        color: #4E5150;
-                                        text-decoration: line-through;
-                                        margin-left: 10px;
-                                    }
-                                }
-
-                                    button {
-                                        background: #E0E0E0;
-                                        color: #828282;
-                                        width: 15px;
-                                        height: 15px;
-                                        display: flex;
-                                        justify-content: center;
-                                        align-items: center;
-                                        border: 0;
-                                        cursor: pointer;
-                                        border-radius: 3px;
-                                        font-weight: 500;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                        p {
-                            font-size: 10px;
-                            font-weight: 500;
-                        }
-                    }
-                }
-            }
-        }
-
-        footer {
-
-            height: 5%;
-            color: #BDBDBD;
-            display: -ms-grid;
-            display: grid;
-            place-items: center;
-            font-size: 12px;
-
-            a {
-                text-decoration: none;
-                color: inherit;
-            }
-
-        }
-
+    header {
+        text-align: center;
+        margin-bottom: 40px;
     }
 
-    @media screen and (max-width: 1024px) {
-        body {
-            width: 80%;
-
-            main {
-                column-gap: 70px;
-            }
-        }
+    header h2 {
+        color: black;
     }
 
-    @media screen and (max-width: 768px) {
-        body {
-            width: 92%;
+    main {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
 
-            main {
-                flex-direction: column-reverse;
-                height: auto;
-                margin-bottom: 50px;
+    form {
+        background-color: #f1f1f1;
+        padding: 20px;
+        border-radius: 5px;
+    }
 
-                .checkout-form {
-                    width: 100%;
-                    margin-top: 35px;
-                }
+    form h5 {
+        color: black;
+        margin-bottom: 10px;
+    }
 
+    .form-control {
+        margin-bottom: 20px;
+    }
 
-            footer {
-                height: 10%;
-            }
-        }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: black;
+    }
+
+    .form-control div {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .form-control .fa {
+        margin-right: 10px;
+        color: #777;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="numeric"] {
+        flex: 1;
+        border: none;
+        padding: 5px;
+    }
+
+    .checkbox-control {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox-control label {
+        margin-left: 5px;
+        font-weight: normal;
+        color: black;
+    }
+
+    .form-control-btn {
+        text-align: center;
+    }
+
+    button {
+        background-color: #0e4bf1;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #0743ce;
     }
 </style>

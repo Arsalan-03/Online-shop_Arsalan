@@ -43,9 +43,14 @@ if (empty($userProducts)) {
                 <td colspan="2">&nbsp;</td>
                 <td colspan="2"><span class="thick"><h2 style="color: red"> <?php echo '$' . $totalPrice ?> </span> </h1></td>
             </tr>
+
             <!-- checkout btn -->
             <tr class="checkoutrow">
                 <td colspan="5" class="checkout"><button id="submitbtn"> <a href="/order" style="color: black">Checkout Now!</a></button></td>
+            </tr>
+
+            <tr class="main">
+                <td colspan="5" class="checkout"><button id="submitbtn"> <a href="/main" style="color: black">Main</a></button></td>
             </tr>
             </tbody>
         </table>
@@ -56,237 +61,102 @@ if (empty($userProducts)) {
 <style>
     @import url(https://fonts.googleapis.com/css?family=Fredoka+One);
 
-    html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    body {
+        background-color: #f1f1f1;
+        font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        border: 0;
-        font-size: 100%;
-        font: inherit;
-        vertical-align: baseline;
-        outline: none;
-        -webkit-font-smoothing: antialiased;
-        -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-    html { overflow-y: scroll; }
-    body {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 62.5%;
-        line-height: 1;
-        color: #414141;
-        background: #caccf7 url('https://i.imgur.com/Syv2IVk.png'); /* https://subtlepatterns.com/old-map/ */
-        padding: 25px 0;
     }
 
-    ::selection { background: #bdc0e8; }
-    ::-moz-selection { background: #bdc0e8; }
-    ::-webkit-selection { background: #bdc0e8; }
-
-    br { display: block; line-height: 1.6em; }
-
-    article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
-    ol, ul { list-style: none; }
-
-    input, textarea {
-        -webkit-font-smoothing: antialiased;
-        -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        outline: none;
-    }
-
-    blockquote, q { quotes: none; }
-    blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
-    strong, b { font-weight: bold; }
-    em, i { font-style: italic; }
-
-    table { border-collapse: collapse; border-spacing: 0; }
-    img { border: 0; max-width: 100%; }
-
-    h1 {
-        font-family: 'Fredoka One', Helvetica, Tahoma, sans-serif;
-        color: #fff;
-        text-shadow: 1px 2px 0 #7184d8;
-        font-size: 3.5em;
-        line-height: 1.1em;
-        padding: 6px 0;
-        font-weight: normal;
-        text-align: center;
-    }
-
-
-    /* page structure */
     #w {
-        display: block;
-        width: 600px;
+        max-width: 1200px;
         margin: 0 auto;
+        background-color: #fff;
+        margin-top: 50px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
 
     #title {
-        display: block;
-        width: 100%;
-        background: #95a6d6;
-        padding: 10px 0;
-        -webkit-border-top-right-radius: 6px;
-        -webkit-border-top-left-radius: 6px;
-        -moz-border-radius-topright: 6px;
-        -moz-border-radius-topleft: 6px;
-        border-top-right-radius: 6px;
-        border-top-left-radius: 6px;
+        background-color: #0e4bf1;
+        padding: 20px;
+        text-align: center;
+    }
+
+    #title h1 {
+        color: #fff;
+        margin: 0;
     }
 
     #page {
-        display: block;
-        background: #fff;
-        padding: 15px 0;
-        -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-        -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        padding: 20px;
     }
 
-    /** cart table **/
     #cart {
-        display: block;
-        border-collapse: collapse;
-        margin: 0;
         width: 100%;
-        font-size: 1.2em;
-        color: #444;
-    }
-    #cart thead th {
-        padding: 8px 0;
-        font-weight: bold;
+        border-collapse: collapse;
     }
 
-    #cart thead th.first {
-        width: 175px;
-    }
-    #cart thead th.second {
-        width: 45px;
-    }
-    #cart thead th.third {
-        width: 230px;
-    }
-    #cart thead th.fourth {
-        width: 130px;
-    }
-    #cart thead th.fifth {
-        width: 20px;
+    #cart th, #cart td {
+        padding: 10px;
     }
 
-    #cart tbody td {
-        text-align: center;
-        margin-top: 4px;
+    #cart th {
+        background-color: #0e4bf1;
+        color: #fff;
+        text-align: left;
     }
 
-    tr.productitm {
-        height: 65px;
-        line-height: 65px;
-        border-bottom: 1px solid #d7dbe0;
+    #cart td {
+        border-bottom: 1px solid #ddd;
     }
-
-
-    #cart tbody td img.thumb {
-        vertical-align: bottom;
-        border: 1px solid #ddd;
-        margin-bottom: 4px;
-    }
-
-    .qtyinput {
-        width: 33px;
-        height: 22px;
-        border: 1px solid #a3b8d3;
-        background: #dae4eb;
-        color: #616161;
-        text-align: center;
-    }
-
-    tr.totalprice, tr.extracosts {
-        height: 35px;
-        line-height: 35px;
-    }
-    tr.extracosts {
-        background: #e4edf4;
-    }
-
-    .remove {
-        /* http://findicons.com/icon/261449/trash_can?id=397422 */
-        cursor: pointer;
-        position: relative;
-        right: 12px;
-        top: 5px;
-    }
-
 
     .light {
-        color: #888b8d;
-        text-shadow: 1px 1px 0 rgba(255,255,255,0.45);
-        font-size: 1.1em;
-        font-weight: normal;
+        font-weight: lighter;
     }
-    .thick {
-        color: #272727;
-        font-size: 1.7em;
+
+    .totalprice {
         font-weight: bold;
+        background-color: #f1f1f1;
     }
 
-
-    /** submit btn **/
-    tr.checkoutrow {
-        background: #050505;
-        border-top: 1px solid rgba(166, 83, 239, 0.55);
-        border-bottom: 1px solid #ffffff;
-    }
-    td.checkout {
-        padding: 12px 0;
-        padding-top: 20px;
-        width: 100%;
+    .checkoutrow {
         text-align: right;
     }
 
+    .main {
+        text-align: left;
+    }
 
-    /* https://codepen.io/guvootes/pen/eyDAb */
-    #submitbtn {
-        width: 150px;
-        height: 35px;
-        outline: none;
-        border: none;
-        border-radius: 5px;
-        margin: 0 0 10px 0;
-        font-size: 1.3em;
-        letter-spacing: 0.05em;
-        font-family: Arial, Tahoma, sans-serif;
+    .checkout {
+        padding: 20px 0;
+    }
+
+    .checkout button {
+        background-color: #0e4bf1;
         color: #fff;
-        text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+        border: none;
+        padding: 10px 20px;
+        text-transform: uppercase;
+        font-weight: bold;
         cursor: pointer;
-        overflow: hidden;
-        border-bottom: 1px solid #6da5ee;
-        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a40f0f), color-stop(100%, #ffffff));
-        background-image: -webkit-linear-gradient(#ffffff, #ffffff);
-        background-image: -moz-linear-gradient(#66aaff, #4d9cff);
-        background-image: -o-linear-gradient(#66aaff, #4d9cff);
-        background-image: linear-gradient(#ffffff, #ffffff);
     }
-    #submitbtn:hover {
-        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4d9cff), color-stop(100%, #338eff));
-        background-image: -webkit-linear-gradient(#4d9cff, #338eff);
-        background-image: -moz-linear-gradient(#4d9cff, #338eff);
-        background-image: -o-linear-gradient(#4d9cff, #338eff);
-        background-image: linear-gradient(#4d9cff, #338eff);
+
+    .checkout button a {
+        color: #fff;
+        text-decoration: none;
     }
-    #submitbtn:active {
-        border-bottom: 0;
-        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #338eff), color-stop(100%, #4d9cff));
-        background-image: -webkit-linear-gradient(#338eff, #4d9cff);
-        background-image: -moz-linear-gradient(#338eff, #4d9cff);
-        background-image: -o-linear-gradient(#338eff, #4d9cff);
-        background-image: linear-gradient(#338eff, #4d9cff);
-        -webkit-box-shadow: inset 0 1px 3px 1px rgba(0,0,0,0.25);
-        -moz-box-shadow: inset 0 1px 3px 1px rgba(0,0,0,0.25);
-        box-shadow: inset 0 1px 3px 1px rgba(0,0,0,0.25);
+
+    .remove {
+        color: #f00;
+        cursor: pointer;
     }
-</style>
+
+    .remove img {
+        width: 15px;
+        vertical-align: middle;
+    }
+
+    .remove:hover {
+        text-decoration: underline;
+    }
+    </style>
