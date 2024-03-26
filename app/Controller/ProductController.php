@@ -3,22 +3,21 @@
 namespace Controller;
 
 use Repository\ProductRepository;
-use Repository\UserProductRepository;
 use Request\ProductRequest;
-use Service\AuthenticationService;
+use Service\AuthenticationService\SessionAuthenticationService;
 use Service\CartService;
 use Service\ProductService;
 
 class ProductController
 {
     private ProductRepository $productModel;
-    private AuthenticationService $authenticationService;
+    private SessionAuthenticationService $authenticationService;
     private CartService $cartService;
 
     public function __construct()
     {
         $this->productModel = new ProductRepository();
-        $this->authenticationService = new AuthenticationService();
+        $this->authenticationService = new SessionAuthenticationService();
         $this->cartService = new CartService();
     }
     public function addProduct(ProductRequest $request): void

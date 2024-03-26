@@ -1,11 +1,11 @@
 <?php
 
-namespace Service;
+namespace Service\AuthenticationService;
 
 use Entity\User;
 use Repository\UserRepository;
 
-class AuthenticationService
+class SessionAuthenticationService
 {
 
     private UserRepository $userRepository;
@@ -40,14 +40,13 @@ class AuthenticationService
             return false;
         }
 
-        if (password_verify($password, $user->getPassword())) {
-            session_start();
-            $_SESSION['user_id'] = $user->getId();
-
-            return true;
+        if (!password_verify($password, $user->getPassword())) {
+            return false;
         }
+        session_start();
+        $_SESSION['user_id'] = $user->getId();
 
-        return false;
+        return true;
     }
 
     public function logout(): void

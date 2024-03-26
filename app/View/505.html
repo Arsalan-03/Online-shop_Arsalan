@@ -1,0 +1,60 @@
+<div><u>Big thanks</u> to everyone who has supported my work by following me!</div>
+<style>
+    html {
+        background: #111;
+        min-height: 100vh;
+        overflow: hidden;
+        font-family: system-ui;
+        display: grid;
+        place-items: center;
+        color: white;
+        user-select: none;
+    }
+    body {
+        margin: 0;
+    }
+    * {
+        user-select: none;
+    }
+    div {
+        width: 100vw;
+        font-size: 48px;
+        line-height: 100%;
+        background: #111;
+        padding: 3rem;
+        box-sizing: border-box;
+    }
+    span {
+        display: block;
+        position: absolute;
+        font-weight: 900;
+        font-size: 33vw;
+        line-height: 0;
+        text-shadow: 0 0 30px black;
+        transform: translate(-50%,-50%);
+        animation: span 10s linear forwards;
+        z-index: -1;
+    }
+    @keyframes span {
+        100% { opacity: 0; transform: translate(-50%,-50%) scale(.1); }
+    }
+</style>
+
+<script>
+    function add500() {
+        var d = document.createElement('span')
+        d.style.left = Math.random()*window.innerWidth + 'px'
+        d.style.top = Math.random()*window.innerHeight + 'px'
+        d.style.color = 'hsl('+Math.random()*360+'deg,100%,50%)'
+        d.innerHTML = '500'
+        d.onanimationend = function(){ this.remove() }
+        document.body.appendChild(d)
+
+        if(document.querySelectorAll('span').length == 40) {
+            document.querySelector('span').remove()
+        }
+
+        setTimeout(add500, 250)
+    }
+    add500()
+</script>

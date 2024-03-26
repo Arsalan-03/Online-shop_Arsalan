@@ -4,7 +4,6 @@ if (empty($products)) {
     echo '<h1 style="color: red">Продуктов в Таблице нет</h1>';
 }
 ?>
-
 <div class="container">
     <h1 style="color: darkred">Online_shop "Ice-Cream" </h1>
 
@@ -58,7 +57,6 @@ if (empty($products)) {
     a {
         text-decoration: none;
     }
-
     a:hover {
         text-decoration: none;
     }

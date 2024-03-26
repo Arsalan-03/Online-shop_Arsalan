@@ -8,7 +8,7 @@ class ProductRepository extends Repository
 {
     public function getAll(): array
     {
-        $statement = $this->pdo->query("SELECT * FROM products");
+        $statement = self::getPdo()->query("SELECT * FROM products");
         $products = $statement->fetchAll();
 
         $result = [];

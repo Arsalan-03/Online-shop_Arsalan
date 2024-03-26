@@ -10,13 +10,13 @@ class UserProductRepository extends Repository
 {
     public function addProduct(int $userId, int $productId, int $quantity): void
     {
-        $stmt = $this->pdo->prepare("INSERT INTO user_products(user_id, product_id, quantity) VALUES(:user_id, :product_id, :quantity)");
+        $stmt = self::getPdo()->prepare("INSERT INTO user_products(user_id, product_id, quantity) VALUES(:user_id, :product_id, :quantity)");
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'quantity' => $quantity]);
     }
 
     public function getOneByUserIdProductId(int $userId, int $productId): UserProduct|null
     {
-        $stmt = $this->pdo->prepare("SELECT up.id AS id, u.id AS user_id, u.name AS user_name, u.email, u.password, 
+        $stmt = self::getPdo()->prepare("SELECT up.id AS id, u.id AS user_id, u.name AS user_name, u.email, u.password, 
         p.id AS product_id, p.name AS product_name, p.image, p.info, p.price, up.quantity FROM user_products up
         JOIN users u ON up.user_id = u.id
         JOIN products p ON up.product_id = p.id
@@ -34,19 +34,19 @@ class UserProductRepository extends Repository
 
     public function updateQuantityPlus(int $quantity, int $userId, int $productId): void
     {
-        $stmt = $this->pdo->prepare("UPDATE user_products SET quantity = (quantity + :quantity) WHERE user_id=:user_id and product_id=:product_id");
+        $stmt = self::getPdo()->prepare("UPDATE user_products SET quantity = (quantity + :quantity) WHERE user_id=:user_id and product_id=:product_id");
         $stmt->execute(['quantity' => $quantity, 'user_id' => $userId, 'product_id' => $productId]);
     }
 
     public function updateQuantityMinus(int $userId, int $productId): void
     {
-        $stmt = $this->pdo->prepare("UPDATE user_products SET quantity = (quantity - 1) WHERE user_id=:user_id and product_id=:product_id");
+        $stmt = self::getPdo()->prepare("UPDATE user_products SET quantity = (quantity - 1) WHERE user_id=:user_id and product_id=:product_id");
         $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
     }
 
     public function getCartProduct(int $userId): UserProduct|null
     {
-        $stmt = $this->pdo->prepare("SELECT user_products.user_id, user_products.quantity, user_products.product_id FROM products
+        $stmt = self::getPdo()->prepare("SELECT user_products.user_id, user_products.quantity, user_products.product_id FROM products
             JOIN user_products ON products.id = user_products.product_id 
             WHERE user_id=:user_id");
         $stmt->execute(['user_id' => $userId]);
@@ -61,7 +61,7 @@ class UserProductRepository extends Repository
 
     public function getAllUserProducts(int $userId): array
     {
-        $stmt = $this->pdo->prepare("SELECT up.id AS id, u.id AS user_id, u.name AS user_name, u.email, u.password, 
+        $stmt = self::getPdo()->prepare("SELECT up.id AS id, u.id AS user_id, u.name AS user_name, u.email, u.password, 
         p.id AS product_id, p.name AS product_name, p.image, p.info, p.price, up.quantity FROM user_products up
         JOIN users u ON up.user_id = u.id
         JOIN products p ON up.product_id = p.id
@@ -78,7 +78,7 @@ class UserProductRepository extends Repository
 
     public function deleteProducts(int $userId): array|false
     {
-        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id=:user_id");
+        $stmt = self::getPdo()->prepare("DELETE FROM user_products WHERE user_id=:user_id");
         $stmt->execute(['user_id' => $userId]);
 
         return $stmt->fetch();

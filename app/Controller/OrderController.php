@@ -2,21 +2,18 @@
 
 namespace Controller;
 
-use Repository\OrderRepository;
-use Repository\OrderProductRepository;
-use Repository\UserProductRepository;
 use Request\OrderRequest;
-use Service\AuthenticationService;
+use Service\AuthenticationService\SessionAuthenticationService;
 use Service\OrderService;
 
 class OrderController
 {
-    private AuthenticationService $authenticationService;
+    private SessionAuthenticationService $authenticationService;
     private OrderService $orderService;
 
     public function __construct()
     {
-        $this->authenticationService = new AuthenticationService();
+        $this->authenticationService = new SessionAuthenticationService();
         $this->orderService = new OrderService();
     }
 

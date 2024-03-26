@@ -23,7 +23,7 @@ class LoginRequest extends Request
     {
         return $this->body['password'];
     }
-    public function validate()
+    public function validate(): array
     {
         $errors = [];
 
