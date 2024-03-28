@@ -2,29 +2,19 @@
 
 namespace Request;
 
+use Repository\UserProductRepository;
+
 class ProductRequest extends Request
 {
-    public function getName()
-    {
-        return $this->body['name'];
-    }
 
-    public function getImage()
-    {
-        return $this->body['image'];
-    }
+    private UserProductRepository $userProductRepository;
 
-    public function getInfo()
+    public function __construct(array $body)
     {
-        return $this->body['info'];
+        parent::__construct($body);
+        $this->userProductRepository = new UserProductRepository();
     }
-
-    public function getPrice()
-    {
-        return $this->body['price'];
-    }
-
-    public function getProduct()
+    public function getProductId()
     {
         return $this->body['product_id'];
     }
@@ -34,13 +24,24 @@ class ProductRequest extends Request
         return $this->body['quantity'];
     }
 
-    public function validate($quantity)
+    public function addValidate(int $userId): array
     {
         $errors = [];
 
-        if ($quantity <= 0) {
+        $product = $this->userProductRepository->getOneByUserIdProductId($userId, $this->getProductId());
+        if ($product === null || $product->getQuantity() <= '0') {
+            $errors['product_id'] = "Товара в корзине не найдено";
+        }
 
-            $errors['quantity'] = "Вы ввели неккоректное значение, попробуйте снова";
+        return $errors;
+    }
+
+    public function deleteValidate(int $userId): array
+    {
+        $errors = [];
+
+        if ($this->getQuantity() <= '0') {
+            $errors['quantity'] = "Неккоректно ведён quantity";
         }
         return $errors;
     }

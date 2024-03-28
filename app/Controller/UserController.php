@@ -1,19 +1,19 @@
 <?php
 namespace Controller;
+
 use Repository\UserRepository;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 use Service\AuthenticationService\InterfaceAuthenticationService;
-use Service\AuthenticationService\SessionAuthenticationService;
 
 class UserController
 {
-    private UserRepository $modelUser;
+    private UserRepository $userRepository;
     private InterfaceAuthenticationService $authenticationService;
 
-    public function __construct(InterfaceAuthenticationService $authenticationService)
+    public function __construct(InterfaceAuthenticationService $authenticationService, UserRepository $userRepository)
     {
-        $this->modelUser = new UserRepository();
+        $this->userRepository = $userRepository;
         $this->authenticationService = $authenticationService;
     }
     public function getRegistrate()
@@ -33,14 +33,14 @@ class UserController
 
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            $this->modelUser->create($name, $email, $password);
+            $this->userRepository->create($name, $email, $password);
             header("Location: /login");
         }
 
         require_once './../View/registrate.php';
     }
 
-    public function getLogin()
+    public function getLogin(): void
     {
         require_once './../View/login.php';
     }

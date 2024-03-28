@@ -2,24 +2,22 @@
 
 namespace Controller;
 
-use Repository\ProductRepository;
 use Request\ProductRequest;
 use Service\AuthenticationService\InterfaceAuthenticationService;
-use Service\AuthenticationService\SessionAuthenticationService;
 use Service\CartService;
 use Service\ProductService;
 
 class ProductController
 {
-    private ProductRepository $productModel;
+    private ProductService $productService;
     private InterfaceAuthenticationService $authenticationService;
     private CartService $cartService;
 
-    public function __construct(InterfaceAuthenticationService $authenticationService)
+    public function __construct(InterfaceAuthenticationService $authenticationService, ProductService $productService, CartService $cartService)
     {
-        $this->productModel = new ProductRepository();
+        $this->productService = $productService;
         $this->authenticationService = $authenticationService;
-        $this->cartService = new CartService();
+        $this->cartService = $cartService;
     }
     public function addProduct(ProductRequest $request): void
     {
@@ -28,19 +26,18 @@ class ProductController
         }
         $user = $this->authenticationService->getCurrentUser();
         $userId = $user->getId();
-        $productId = $request->getProduct();
 
+        $productId = $request->getProductId();
         $quantity = $request->getQuantity();
 
-        $errors = $request->validate($quantity);
+        $errors = $request->deleteValidate($userId);
 
         if (empty($errors)) {
             $this->cartService->addProduct($quantity, $productId);
-
             header("Location: /main");
         } else {
-
-            $products = $this->productModel->getAll();
+            $products = $this->productService->getAll();
+            $totalPrice = $this->cartService->getTotalPrice();
             require_once './../View/main.php';
         }
     }
@@ -53,10 +50,17 @@ class ProductController
 
         $user = $this->authenticationService->getCurrentUser();
         $userId = $user->getId();
+        $productId = $request->getProductId();
 
-        $productId = $request->getProduct();
-        $this->cartService->clearCartByUserIdProductId($productId);
+        $errors = $request->addValidate($userId);
 
-        header("Location: /main");
+        if (empty($errors)) {
+            $this->cartService->clearCartByUserIdProductId($productId);
+            header("Location: /main");
+        } else {
+            $products = $this->productService->getAll();
+            $totalPrice = $this->cartService->getTotalPrice();
+            require_once './../View/main.php';
+        }
     }
 }

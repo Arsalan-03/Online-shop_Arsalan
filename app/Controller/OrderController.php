@@ -4,7 +4,6 @@ namespace Controller;
 
 use Request\OrderRequest;
 use Service\AuthenticationService\InterfaceAuthenticationService;
-use Service\AuthenticationService\SessionAuthenticationService;
 use Service\OrderService;
 
 class OrderController
@@ -12,10 +11,10 @@ class OrderController
     private InterfaceAuthenticationService $authenticationService;
     private OrderService $orderService;
 
-    public function __construct(InterfaceAuthenticationService $authenticationService)
+    public function __construct(InterfaceAuthenticationService $authenticationService, OrderService $orderService)
     {
         $this->authenticationService = $authenticationService;
-        $this->orderService = new OrderService();
+        $this->orderService = $orderService;
     }
 
     public function getOrders(): void
@@ -23,7 +22,6 @@ class OrderController
         if (!$this->authenticationService->check()) {
             header("Location: /login");
         }
-
         require_once './../View/order.php';
     }
 

@@ -1,23 +1,22 @@
 <?php
 namespace Controller;
 
-use Repository\ProductRepository;
 use Service\AuthenticationService\InterfaceAuthenticationService;
-use Service\AuthenticationService\SessionAuthenticationService;
 use Service\CartService;
 use Service\ProductService;
 
 class MainController
 {
-    private ProductRepository $productModel;
+    private ProductService $productService;
     private InterfaceAuthenticationService $authenticationService;
     private CartService $cartService;
 
-    public function __construct(InterfaceAuthenticationService $authenticationService)
+    public function __construct(InterfaceAuthenticationService $authenticationService, ProductService $productService, CartService $cartService)
     {
-        $this->productModel = new ProductRepository();
+        $this->productService = $productService;
         $this->authenticationService = $authenticationService;
-        $this->cartService = new CartService();}
+        $this->cartService = $cartService;
+    }
     public function getProducts(): void
     {
        if (!$this->authenticationService->check()) {
@@ -26,8 +25,7 @@ class MainController
            $user = $this->authenticationService->getCurrentUser();
            $userId = $user->getId();
 
-           $products = $this->productModel->getAll();
-           $userProducts = $this->cartService->getProducts();
+           $products = $this->productService->getAll();
            $totalQuantity = $this->cartService->getCountQuantity();
 
             require_once './../View/main.php';

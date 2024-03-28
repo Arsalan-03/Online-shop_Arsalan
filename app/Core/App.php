@@ -2,13 +2,8 @@
 
 namespace Core;
 
-use Controller\CartController;
-use Controller\MainController;
-use Controller\OrderController;
-use Controller\ProductController;
-use Controller\UserController;
 use Request\Request;
-use Service\AuthenticationService\SessionAuthenticationService;
+use Throwable;
 
 class App
 {
@@ -16,7 +11,7 @@ class App
 
     ];
 
-    public function run()
+    public function run(): void
     {
         $requestUri = $_SERVER['REQUEST_URI'];
 
@@ -30,13 +25,20 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
                 $requestClass = $handler['request'] ?? Request::class;
-
-                $authService = new SessionAuthenticationService();
-
-                $obj = new $class($authService);
-
                 $request = new $requestClass($_POST);
-                $obj->$method($request);
+
+                $container = new Container();
+                $container->save();
+
+                $obj = $container->get($class);
+
+                try {
+                    $obj->$method($request);
+                } catch (Throwable $exception) {
+
+                    require_once './../View/505.html';
+                }
+
             } else {
                 echo "Метод $requestMethod не поддерживается для $requestUri";
             }
@@ -45,7 +47,7 @@ class App
         }
     }
 
-    public function get(string $route, string $class, string $method, string $requestClass = null)
+    public function get(string $route, string $class, string $method, string $requestClass = null): void
     {
         $this->routes[$route]['GET'] = [
             'class' => $class,
@@ -53,7 +55,7 @@ class App
             'request' => $requestClass
         ];
     }
-    public function post(string $route, string $class, string $method, string $requestClass = null)
+    public function post(string $route, string $class, string $method, string $requestClass = null): void
     {
         $this->routes[$route]['POST'] = [
             'class' => $class,
@@ -62,7 +64,7 @@ class App
         ];
     }
 
-    public function pull(string $route, string $class, string $method, string $requestClass = null)
+    public function pull(string $route, string $class, string $method, string $requestClass = null): void
     {
         $this->routes[$route]['PULL'] = [
             'class' => $class,
@@ -71,7 +73,7 @@ class App
         ];
     }
 
-    public function delete(string $route, string $class, string $method, string $requestClass = null)
+    public function delete(string $route, string $class, string $method, string $requestClass = null): void
     {
         $this->routes[$route]['DELETE'] = [
             'class' => $class,

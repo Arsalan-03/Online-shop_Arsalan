@@ -3,7 +3,6 @@
 namespace Controller;
 
 use Service\AuthenticationService\InterfaceAuthenticationService;
-use Service\AuthenticationService\SessionAuthenticationService;
 use Service\CartService;
 
 class CartController
@@ -11,10 +10,10 @@ class CartController
     private InterfaceAuthenticationService $authenticationService;
     private CartService $cartService;
 
-    public function __construct(InterfaceAuthenticationService $authenticationService)
+    public function __construct(InterfaceAuthenticationService $authenticationService, CartService $cartService)
     {
         $this->authenticationService = $authenticationService;
-        $this->cartService = new CartService();
+        $this->cartService = $cartService;
     }
     public function getCart(): void
     {

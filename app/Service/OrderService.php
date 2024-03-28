@@ -32,7 +32,6 @@ class OrderService
 
             $pdo->commit();
         } catch (\Throwable $exception) {
-            require_once './../View/505.html';
 
             $pdo->rollBack();
             throw $exception;
